@@ -327,7 +327,12 @@
 <footer>
     <div>Counter value: {{counter()}}</div>
     <button (click)="increment()">Increment</button>
+    <hr>
+    <div>{{town().name}}</div>
+    <hr>
+    <div>{{ towns()[1] }}</div>
 </footer>
+<hr>
 <hr>
 <aside>
     <app-foo [message]="message"></app-foo>
