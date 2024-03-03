@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Signal, signal, WritableSignal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, Signal, signal, WritableSignal} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {FooComponent} from "./foo/foo.component";
 import {JsonPipe} from "@angular/common";
@@ -19,6 +19,9 @@ export class AppComponent {
     name: 'London'
   });
   protected message: string[] = [];
+  protected derivedCounter: Signal<number> = computed<number>(() => {
+    return this.counter() * 10;
+  });
 
   constructor() {
     const readonlyCounter: Signal<number> = this.counter.asReadonly();
