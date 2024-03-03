@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component, signal, WritableSignal} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -6,13 +6,15 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
   public title: string = 'angular-v17-signals';
-  protected counter: number = 0;
+  protected counter: WritableSignal<number> = signal<number>(0);
 
   protected increment(): void {
-    this.counter++;
+    // this.counter++;
+    this.counter.set(this.counter() + 1);
   }
 }
