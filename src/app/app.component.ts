@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
+  effect, EffectCleanupRegisterFn,
   EffectRef,
   Signal,
   signal,
@@ -41,13 +41,14 @@ export class AppComponent {
       return 0;
     }
   });
+  private effRef: EffectRef;
 
   constructor() {
     const readonlyCounter: Signal<number> = this.counter.asReadonly();
     // readonlyCounter.
 
     // https://angular.io/guide/signals#effects
-    const effRef: EffectRef = effect(() => {
+    this.effRef = effect((effectFn: EffectCleanupRegisterFn): null => {
       // Dependencies between signals and effect
       const counterValue: number = this.counter();
       const derivedCounterValue: number = this.derivedCounter();
@@ -62,8 +63,16 @@ export class AppComponent {
       // Use `allowSignalWrites` in the `CreateEffectOptions` to enable this inside effects.
       // this.counter.set(77);
 
+      effectFn((): void => {
+        localStorage.clear();
+      });
+
       return null;
-    }, { allowSignalWrites: false });
+    }, { allowSignalWrites: false, manualCleanup: true });
+  }
+
+  protected cleanUpEffect(): void {
+    this.effRef.destroy();
   }
 
   protected incrementMultiplier(): void {
