@@ -13,19 +13,31 @@ import {JsonPipe} from "@angular/common";
 })
 export class AppComponent {
   public title: string = 'angular-v17-signals';
+  protected multiplier: number = 0;
   protected counter: WritableSignal<number> = signal<number>(0);
   protected towns: WritableSignal<string[]> =  signal<string[]>(['London', 'Paris', 'New York', 'Berlin', 'Madrid']);
   protected town = signal<Record<'name', string>>({
     name: 'London'
   });
   protected message: string[] = [];
-  protected derivedCounter: Signal<number> = computed<number>(() => {
-    return this.counter() * 10;
+  protected derivedCounter: Signal<number> = computed<number>((): number => {
+    const res: number = this.counter() * 10;
+
+    if(this.multiplier >= 10) {
+      // const res: number = this.counter() * 10;
+      return res;
+    } else {
+      return 0;
+    }
   });
 
   constructor() {
     const readonlyCounter: Signal<number> = this.counter.asReadonly();
     // readonlyCounter.
+  }
+
+  protected incrementMultiplier(): void {
+    this.multiplier++;
   }
 
   protected increment(): void {
@@ -47,10 +59,9 @@ export class AppComponent {
     // Angular has no way to know to value has been mutated
     // Works with default changeDetection
     // Solution: Use set- oder update- fn
-    /*
     this.town().name = 'Bielefeld';
     this.towns()[1] = 'Bielefeld';
-    */
+
 
     // Better
     // Signal ist able to inform interests about changes
