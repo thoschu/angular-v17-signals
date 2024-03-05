@@ -25,3 +25,14 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Content
+
+| Tag name  | Branch name                            |
+|-----------|----------------------------------------|
+| 1         | main                                   |
+| 2         | signals-intro                          |
+| 3         | signals-update-api                     |
+| 4         | signals-with-objects-and-arrays        |
+| 5         | derived-signals-with-the-compute()-api |
+| 6         | signals-effect()                       |
