@@ -36,3 +36,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 | 4         | signals-with-objects-and-arrays        |
 | 5         | derived-signals-with-the-compute()-api |
 | 6         | signals-effect()                       |
+| 7         | signals-effect()-cleanup               |
+| 8         | signal-based-data-services             |
