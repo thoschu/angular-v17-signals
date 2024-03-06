@@ -1,12 +1,9 @@
 import { JsonPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  EffectRef,
-  Signal,
-  signal,
+  Component, computed,
+  effect, EffectRef,
+  Signal, signal,
   WritableSignal
 } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
