@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, signal, WritableSignal} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {FooComponent} from "./foo/foo.component";
+
+import {FooComponent} from './foo/foo.component';
 
 @Component({
   selector: 'app-root',
