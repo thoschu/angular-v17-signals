@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, effect, Signal} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { FooComponent } from './foo/foo.component';
@@ -19,7 +19,18 @@ export class AppComponent {
     return this.appService.counter() * 2;
   });
 
-  constructor(protected readonly appService: AppService) {}
+  constructor(protected readonly appService: AppService) {
+    effect((): void => {
+      const counterValue: number = this.appService.counter();
+
+      if (counterValue === 0) {
+        // this.message = [];
+        while (this.message.length > 0) {
+          this.message.pop();
+        }
+      }
+    });
+  }
 
   protected increment(): void {
     this.appService.incrementCounter();
