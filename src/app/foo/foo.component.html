@@ -1,2 +1,2 @@
-<p>foo works! {{message.length + appService.counter}}</p>
-<button>RESET</button>
+<p>foo works! {{message.length * appService.counter()}}</p>
+<button (click)="reset()">RESET</button>

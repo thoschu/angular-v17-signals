@@ -1,5 +1,6 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {AppService} from "../app.service";
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
+import { AppService } from '../app.service';
 
 @Component({
   selector: 'app-foo',
@@ -7,11 +8,15 @@ import {AppService} from "../app.service";
   imports: [],
   templateUrl: './foo.component.html',
   styleUrl: './foo.component.scss',
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FooComponent {
   @Input({required: true})
-  message: string[] = [];
+  public message: string[] = [];
 
   constructor(protected readonly appService: AppService) {}
+
+  protected reset(): void {
+    this.appService.resetCounter();
+  }
 }

@@ -1,4 +1,4 @@
-import {Injectable, Signal, signal, WritableSignal} from '@angular/core';
+import { Injectable, Signal, signal, WritableSignal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -14,4 +14,7 @@ export class AppService {
     this.counterSignal.update((val: number) => val + 1);
   }
 
+  public resetCounter(): void {
+    this.counterSignal.set(AppService.ZERO);
+  }
 }
