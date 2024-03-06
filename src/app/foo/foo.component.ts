@@ -14,7 +14,8 @@ export class FooComponent {
   // @Input({required: true})
   // public message: string[] = [];
   // public message: InputSignal<string[]> = input<string[]>([]);
-  public message: InputSignal<string[]> = input.required<string[]>();
+  // public message: InputSignal<string[]> = input<string[]>([], {alias: 'messageAlias',});
+  public message: InputSignal<string[]> = input.required<string[]>({ alias: 'messageAlias' });
   protected readonly derivedMessage: Signal<number>;
 
   constructor(protected readonly appService: AppService) {
