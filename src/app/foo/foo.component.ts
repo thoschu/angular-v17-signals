@@ -13,7 +13,8 @@ import { AppService } from '../app.service';
 export class FooComponent {
   // @Input({required: true})
   // public message: string[] = [];
-  public message: InputSignal<string[]> = input<string[]>([]);
+  // public message: InputSignal<string[]> = input<string[]>([]);
+  public message: InputSignal<string[]> = input.required<string[]>();
   protected readonly derivedMessage: Signal<number>;
 
   constructor(protected readonly appService: AppService) {
