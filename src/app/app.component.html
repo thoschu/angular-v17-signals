@@ -325,7 +325,8 @@
 </main>
 <hr>
 <footer>
-    <div>Counter value: {{counter()}}</div>
+    <div>Counter value: {{appService.counter()}}</div>
+    <div>DerivedCounter value: {{derivedCounter()}}</div>
     <button (click)="increment()">Increment</button>
 </footer>
 <hr>

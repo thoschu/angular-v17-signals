@@ -1,7 +1,8 @@
-import {ChangeDetectionStrategy, Component, signal, WritableSignal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, Signal} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import {FooComponent} from './foo/foo.component';
+import { FooComponent } from './foo/foo.component';
+import { AppService } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -12,14 +13,16 @@ import {FooComponent} from './foo/foo.component';
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class AppComponent {
-  public title: string = 'angular-v17-signals';
-  protected counter: WritableSignal<number> = signal<number>(0);
-  protected message: string[] = [];
+  public readonly title: string = 'angular-v17-signals';
+  protected readonly message: string[] = [];
+  protected readonly derivedCounter: Signal<number> = computed<number>((): number => {
+    return this.appService.counter() * 2;
+  });
+
+  constructor(protected readonly appService: AppService) {}
 
   protected increment(): void {
-    // this.counter++;
-    const val: number = this.counter() + 1;
-    this.message.push(val.toString());
-    this.counter.set(val);
+    this.appService.incrementCounter();
+    this.message.push(this.appService.counter().toString());
   }
 }
