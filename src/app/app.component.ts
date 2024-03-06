@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, computed, effect, Signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, effect, EffectRef, Signal} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { FooComponent } from './foo/foo.component';
@@ -20,7 +20,7 @@ export class AppComponent {
   });
 
   constructor(protected readonly appService: AppService) {
-    effect((): void => {
+    const effRef: EffectRef = effect((): void => {
       const counterValue: number = this.appService.counter();
 
       if (counterValue === 0) {
@@ -29,7 +29,7 @@ export class AppComponent {
           this.message.pop();
         }
       }
-    });
+    }, { manualCleanup: false });
   }
 
   protected increment(): void {
