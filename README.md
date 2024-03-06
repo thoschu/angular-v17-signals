@@ -38,3 +38,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 | 6         | signals-effect()                       |
 | 7         | signals-effect()-cleanup               |
 | 8         | signal-based-data-services             |
+| 9         | input-signals                          |
+| 10        | signals-input-options                  |
