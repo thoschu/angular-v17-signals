@@ -13,7 +13,5 @@ export class FooComponent {
   @Input({required: true})
   message: string[] = [];
 
-  constructor(private readonly appService: AppService) {
-
-  }
+  constructor(protected readonly appService: AppService) {}
 }
