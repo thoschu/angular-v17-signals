@@ -176,12 +176,15 @@
     }
   }
 </style>
-<header>
+<header class="center">
     <!-- default: when the browser is idle -->
     @defer {
         <app-pdf />
-    } @placeholder {
-        <h2>This is the placeholder</h2>
+    } @placeholder(minimum 3s) {
+        <!-- content of @placeholder is eagerly loaded. not intended to show a spinner! -->
+        <code>
+            Foo bar baz
+        </code>
     }
 </header>
 <main class="main">
