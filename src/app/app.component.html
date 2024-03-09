@@ -177,9 +177,12 @@
   }
 </style>
 <header class="center">
-    @defer {
-        <!-- default: when the browser is idle: @defer(on idle) -->
-        <!-- https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback?retiredLocale=de -->
+    @defer(on immediate; prefetch on immediate) {
+        <!-- default: when the browser is idle: @defer(on idle; prefetch on idle) {} like: @defer {} -->
+                <!-- 'idle' when requestIdleCallback occurs -->
+                <!-- https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback?retiredLocale=de -->
+        <!-- other: @defer(on immediate; prefetch on immediate) -->
+                <!-- 'immediate' like the name aus expresses -->
         <app-pdf />
     }
     @placeholder {
