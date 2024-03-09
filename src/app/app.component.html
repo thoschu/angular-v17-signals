@@ -117,7 +117,7 @@
     border-radius: 2.75rem;
     border: 0;
     transition: background 0.3s ease;
-    font-family: var(--inter-font);
+    // font-family: var(--inter-font);
     font-size: 0.875rem;
     font-style: normal;
     font-weight: 500;
@@ -184,7 +184,7 @@
         <!-- @defer(on immediate; prefetch on immediate) -->
                 <!-- 'immediate': like the name aus expresses -->
         <!-- on timer(10s); prefetch on timer(5s) -->
-                <!-- 'timer': chunk should only be loaded 5s after the component got initialized -->
+                <!-- 'timer': chunk should only be loaded 5s after the component got initialized/rendered -->
                 <!-- and then 10s after the component got initialized and chunk has finished loading the defered block should be displayed -->
         <app-pdf />
     }
@@ -203,7 +203,9 @@
     }
 
     @error {
-        <code>Failed to load the calendar</code>
+        <code>
+            <h2>Failed to load the calendar</h2>
+        </code>
     }
 </header>
 <main class="main">
