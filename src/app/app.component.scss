@@ -1,3 +1,9 @@
-.center {
-  width: 100vw;
+:host {
+  .center {
+    width: 100vw;
+  }
+
+  code {
+    background-color: orange;
+  }
 }
