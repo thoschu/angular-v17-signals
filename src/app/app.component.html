@@ -180,11 +180,17 @@
     <!-- default: when the browser is idle -->
     @defer {
         <app-pdf />
-    } @placeholder(minimum 3s) {
-        <!-- content of @placeholder is eagerly loaded. not intended to show a spinner! -->
+    }
+    @placeholder {
+        <!-- @placeholder(minimum 1s) -->
+        <!-- replacement; content of @placeholder is eagerly loaded. not intended to show a spinner! -->
         <code>
             Foo bar baz
         </code>
+    }
+    @loading(minimum 3s; after 1s)  {
+        <!-- @loading(minimum 3s; after 1s); show loading spinner for 3 seconds, if loading takes longer then 1 second -->
+        <mat-spinner></mat-spinner>
     }
 </header>
 <main class="main">

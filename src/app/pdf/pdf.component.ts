@@ -1,3 +1,4 @@
+import { NgOptimizedImage } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 
@@ -5,6 +6,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
   selector: 'app-pdf',
   standalone: true,
   imports: [
+    NgOptimizedImage,
     MatExpansionModule
   ],
   templateUrl: './pdf.component.html',
@@ -16,5 +18,6 @@ export class PdfComponent {
     const signal: AbortSignal = controller.signal;
 
     console.log(signal);
+    // https://pdfmake.github.io/docs/0.3/getting-started/client-side/
   }
 }
