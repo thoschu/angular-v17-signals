@@ -177,8 +177,9 @@
   }
 </style>
 <header class="center">
-    <!-- default: when the browser is idle -->
     @defer {
+        <!-- default: when the browser is idle: @defer(on idle) -->
+        <!-- https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback?retiredLocale=de -->
         <app-pdf />
     }
     @placeholder {
@@ -191,6 +192,8 @@
     @loading(minimum 3s; after 1s)  {
         <!-- @loading(minimum 3s; after 1s); show loading spinner for 3 seconds, if loading takes longer then 1 second -->
         <mat-spinner></mat-spinner>
+    } @error {
+        <p>Failed to load the calendar</p>
     }
 </header>
 <main class="main">

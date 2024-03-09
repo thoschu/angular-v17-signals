@@ -13,4 +13,14 @@ import { PdfComponent } from './pdf/pdf.component';
 })
 export class AppComponent {
   public title: string = 'angular-v17-signals';
+
+  constructor() {
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback?retiredLocale=de
+    window.requestIdleCallback((deadline: IdleDeadline): unknown => {
+      while ((deadline.timeRemaining() > 0 || deadline.didTimeout)) {
+        // console.dir(deadline);
+      }
+      return deadline;
+    }, { timeout: 3000 });
+  }
 }

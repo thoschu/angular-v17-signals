@@ -1,6 +1,8 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
+
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 
 @Component({
   selector: 'app-pdf',
@@ -12,12 +14,19 @@ import { MatExpansionModule } from '@angular/material/expansion';
   templateUrl: './pdf.component.html',
   styleUrl: './pdf.component.scss'
 })
-export class PdfComponent {
+export class PdfComponent implements OnInit {
+  protected readonly imageSrc: string = 'https://www.thomas-schulte.de/pics/es6-module.png';
+
   constructor() {
     const controller: AbortController = new AbortController();
     const signal: AbortSignal = controller.signal;
 
     console.log(signal);
-    // https://pdfmake.github.io/docs/0.3/getting-started/client-side/
+  }
+
+  public async ngOnInit(): Promise<void> {
+    const pdfDoc: PDFDocument = await PDFDocument.create();
+
+    console.dir(pdfDoc);
   }
 }
