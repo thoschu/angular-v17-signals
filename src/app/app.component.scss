@@ -1,11 +1,23 @@
 :host {
+  main {
+    margin-bottom: 500px;
+  }
+
   .center {
     width: 100vw;
+
+    .placeholder {
+      text-align: center;
+    }
   }
 
   code {
     h2 {
       color: red;
     }
+  }
+
+  hr.trigger {
+    margin-bottom: 500px;
   }
 }

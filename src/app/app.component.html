@@ -176,38 +176,6 @@
     }
   }
 </style>
-<header class="center">
-    @defer(on timer(10s); prefetch on timer(7s)) {
-        <!-- default: when the browser is idle: @defer(on idle; prefetch on idle) {} like: @defer {} -->
-                <!-- 'idle': when requestIdleCallback occurs -->
-                <!-- https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback?retiredLocale=de -->
-        <!-- @defer(on immediate; prefetch on immediate) -->
-                <!-- 'immediate': like the name aus expresses -->
-        <!-- on timer(10s); prefetch on timer(5s) -->
-                <!-- 'timer': chunk should only be loaded 7s after the component got initialized/rendered -->
-                <!-- and then 10s after the component got initialized and chunk has finished loading the defered block should be displayed -->
-        <app-pdf />
-    }
-
-    @placeholder {
-        <!-- @placeholder(minimum 1s) -->
-        <!-- replacement; content of @placeholder is eagerly loaded. not intended to show a spinner! -->
-        <p>
-            &#64;placeholder: Foo bar baz
-        </p>
-    }
-
-    @loading(minimum 3s; after 1s)  {
-        <!-- @loading(minimum 3s; after 1s); show loading spinner for 3 seconds, if loading takes longer then 1 second -->
-        <mat-spinner></mat-spinner>
-    }
-
-    @error {
-        <code>
-            <h2>Failed to load the calendar</h2>
-        </code>
-    }
-</header>
 <main class="main">
   <div class="content">
     <div class="left-side">
@@ -354,7 +322,46 @@
     </div>
   </div>
 </main>
+<hr class="trigger" #trigger>
+<footer class="center">
+    @defer(on viewport(trigger); prefetch on idle) {
+        <!-- default: when the browser is idle: @defer(on idle; prefetch on idle) {} like: @defer {} -->
+            <!-- 'idle': when requestIdleCallback occurs -->
+            <!-- https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback?retiredLocale=de -->
 
+        <!-- @defer(on immediate; prefetch on immediate) -->
+            <!-- 'immediate': like the name aus expresses -->
+
+        <!-- on timer(10s); prefetch on timer(7s) -->
+            <!-- 'timer': chunk should only be loaded 7s after the component got initialized/rendered -->
+            <!-- and then 10s after the component got initialized and chunk has finished loading the defered block should be displayed -->
+
+        <!-- @defer(on viewport; prefetch on idle) # @defer(on viewport; prefetch on viewport) # @defer(on viewport; prefetch on timer(7s)) -->
+            <!-- 'viewport': when the defered block is in the viewport the block should be displayed -->
+            <!-- 'viewport(trigger)': when the trigger element is in the viewport the block should be displayed -->
+
+        <app-pdf />
+    }
+
+    @placeholder {
+        <!-- @placeholder(minimum 1s) -->
+                <!-- replacement; content of @placeholder is eagerly loaded. not intended to show a spinner! -->
+        <p class="placeholder">
+            &#64;placeholder: Foo bar baz
+        </p>
+    }
+
+    @loading(minimum 3s; after 1s)  {
+        <!-- @loading(minimum 3s; after 1s); show loading spinner for 3 seconds, if loading takes longer then 1 second -->
+        <mat-spinner></mat-spinner>
+    }
+
+    @error {
+        <code>
+            <h2>Failed to load the calendar</h2>
+        </code>
+    }
+</footer>
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
