@@ -326,8 +326,10 @@
     <hr class="trigger" >
 </div>
 <footer class="center">
+    <button (click)="performPrefetch()">PREFETCH</button>
+    <button (click)="performContent()">SHOW</button>
     <p #display>DISPLAY</p>
-    @defer(on hover(display); prefetch on hover(trigger)) {
+    @defer(when doContent; prefetch when doPrefetch) {
         <!-- @defer(on idle; prefetch on idle) >>> default: when the browser is idle, like: @defer -->
             <!-- 'idle': when requestIdleCallback occurs -->
             <!-- https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback?retiredLocale=de -->
@@ -347,6 +349,9 @@
             <!-- interaction with the placeholder: e.g. click, focus ... -->
 
         <!-- @defer(on hover; prefetch on hover(trigger)) # @defer(on interaction(display); prefetch on hover(trigger)) -->
+
+        <!-- 'on' for pre-build triggers and 'when' for custom triggers -->
+            <!--  @defer(when doContent; prefetch when doPrefetch) -->
 
         <app-pdf />
     }

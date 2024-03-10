@@ -13,6 +13,8 @@ import { PdfComponent } from './pdf/pdf.component';
 })
 export class AppComponent {
   public title: string = 'angular-v17-signals';
+  protected doPrefetch: boolean = false;
+  protected doContent: boolean = false;
 
   constructor() {
     // https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback?retiredLocale=de
@@ -22,5 +24,13 @@ export class AppComponent {
       }
       return deadline;
     }, { timeout: 3000 });
+  }
+
+  public performPrefetch(): void {
+    this.doPrefetch = true;
+  }
+
+  public performContent(): void {
+    this.doContent = true;
   }
 }
