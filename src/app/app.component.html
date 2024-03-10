@@ -324,21 +324,25 @@
 </main>
 <hr class="trigger" #trigger>
 <footer class="center">
-    @defer(on viewport(trigger); prefetch on idle) {
-        <!-- default: when the browser is idle: @defer(on idle; prefetch on idle) {} like: @defer {} -->
+    <p #display>DISPLAY</p>
+    @defer(on interaction(display); prefetch on interaction(trigger)) {
+        <!-- @defer(on idle; prefetch on idle) >>> default: when the browser is idle, like: @defer -->
             <!-- 'idle': when requestIdleCallback occurs -->
             <!-- https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback?retiredLocale=de -->
 
         <!-- @defer(on immediate; prefetch on immediate) -->
             <!-- 'immediate': like the name aus expresses -->
 
-        <!-- on timer(10s); prefetch on timer(7s) -->
+        <!-- @defer(on timer(10s); prefetch on timer(7s)) -->
             <!-- 'timer': chunk should only be loaded 7s after the component got initialized/rendered -->
             <!-- and then 10s after the component got initialized and chunk has finished loading the defered block should be displayed -->
 
         <!-- @defer(on viewport; prefetch on idle) # @defer(on viewport; prefetch on viewport) # @defer(on viewport; prefetch on timer(7s)) -->
             <!-- 'viewport': when the defered block is in the viewport the block should be displayed -->
-            <!-- 'viewport(trigger)': when the trigger element is in the viewport the block should be displayed -->
+            <!-- 'viewport(trigger)': when the trigger element is in the viewport the block should be displayed or fetches: @defer(on viewport; prefetch on viewport(trigger)) -->
+
+        <!-- @defer(on interaction; prefetch on interaction(trigger)) # @defer(on interaction(display); prefetch on interaction(trigger)) -->
+            <!-- interaction with the placeholder: e.g. click, focus ... -->
 
         <app-pdf />
     }

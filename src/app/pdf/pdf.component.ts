@@ -2,6 +2,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 
+import html2canvas from 'html2canvas';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 
 @Component({
@@ -42,6 +43,11 @@ export class PdfComponent implements OnInit {
   public async ngOnInit(): Promise<void> {
     const pdfDoc: PDFDocument = await PDFDocument.create();
 
-    console.dir(pdfDoc);
+    console.dir(document.body);
+
+    html2canvas(document.body).then((canvas: HTMLCanvasElement): void => {
+      //document.body.appendChild(canvas);
+      // console.log(canvas);
+    });
   }
 }
