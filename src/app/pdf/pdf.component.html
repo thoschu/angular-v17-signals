@@ -8,6 +8,7 @@
         </mat-panel-description>
     </mat-expansion-panel-header>
     <div class="img-center">
+        <button (click)="downloadPdf()">DOWNLOAD</button>
         <img [ngSrc]="imageSrc" alt="defer-img" width="890" height="225" priority>
         <hr>
         @for (item of items; track item.name) {
