@@ -325,7 +325,7 @@
 <hr class="trigger" #trigger>
 <footer class="center">
     <p #display>DISPLAY</p>
-    @defer(on interaction(display); prefetch on interaction(trigger)) {
+    @defer(on idle; prefetch on idle) {
         <!-- @defer(on idle; prefetch on idle) >>> default: when the browser is idle, like: @defer -->
             <!-- 'idle': when requestIdleCallback occurs -->
             <!-- https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback?retiredLocale=de -->
@@ -343,6 +343,8 @@
 
         <!-- @defer(on interaction; prefetch on interaction(trigger)) # @defer(on interaction(display); prefetch on interaction(trigger)) -->
             <!-- interaction with the placeholder: e.g. click, focus ... -->
+
+        <!-- @defer(on hover; prefetch on hover(trigger)) -->
 
         <app-pdf />
     }
