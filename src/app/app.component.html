@@ -224,7 +224,7 @@
           <clipPath id="a"><path fill="#fff" d="M0 0h982v239H0z" /></clipPath>
         </defs>
       </svg>
-      <h1>Hello, {{ title }}</h1>
+      <h1>Hello, {{ title }} and &#64;defer</h1>
       <p>Congratulations! Your app is running. 🎉</p>
     </div>
     <div class="divider" role="separator" aria-label="Divider"></div>
@@ -327,7 +327,7 @@
 </div>
 <footer class="center">
     <p #display>DISPLAY</p>
-    @defer(on hover; prefetch on hover(trigger)) {
+    @defer(on hover(display); prefetch on hover(trigger)) {
         <!-- @defer(on idle; prefetch on idle) >>> default: when the browser is idle, like: @defer -->
             <!-- 'idle': when requestIdleCallback occurs -->
             <!-- https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback?retiredLocale=de -->
@@ -346,7 +346,7 @@
         <!-- @defer(on interaction; prefetch on interaction(trigger)) # @defer(on interaction(display); prefetch on interaction(trigger)) -->
             <!-- interaction with the placeholder: e.g. click, focus ... -->
 
-        <!-- @defer(on hover; prefetch on hover(trigger)) -->
+        <!-- @defer(on hover; prefetch on hover(trigger)) # @defer(on interaction(display); prefetch on hover(trigger)) -->
 
         <app-pdf />
     }
