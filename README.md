@@ -41,3 +41,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 | 9         | input-signals                          |
 | 10        | signals-input-options                  |
 | 11        | extra-@defer                           |
+| 12        | other                                  |
