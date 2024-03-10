@@ -322,10 +322,12 @@
     </div>
   </div>
 </main>
-<hr class="trigger" #trigger>
+<div #trigger>
+    <hr class="trigger" >
+</div>
 <footer class="center">
     <p #display>DISPLAY</p>
-    @defer(on idle; prefetch on idle) {
+    @defer(on hover; prefetch on hover(trigger)) {
         <!-- @defer(on idle; prefetch on idle) >>> default: when the browser is idle, like: @defer -->
             <!-- 'idle': when requestIdleCallback occurs -->
             <!-- https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback?retiredLocale=de -->
