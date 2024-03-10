@@ -9,5 +9,15 @@
     </mat-expansion-panel-header>
     <div class="img-center">
         <img [ngSrc]="imageSrc" alt="defer-img" width="890" height="225" priority>
+        <hr>
+        @for (item of items; track item.name) {
+            @if (item.type === 'odd') {
+                <p class="odd">{{ item.name }}</p>
+            } @else {
+                <p class="even">{{ item.name }}</p>
+            }
+        } @empty {
+            <i>There are no items.</i>
+        }
     </div>
 </mat-expansion-panel>

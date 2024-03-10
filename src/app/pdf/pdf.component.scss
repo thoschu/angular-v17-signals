@@ -1,5 +1,13 @@
 :host {
   .img-center {
     text-align: center;
+
+    .odd {
+      color: red;
+    }
+
+    .even {
+      color: blue;
+    }
   }
 }

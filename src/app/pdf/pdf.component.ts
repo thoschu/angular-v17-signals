@@ -16,6 +16,21 @@ import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
 })
 export class PdfComponent implements OnInit {
   protected readonly imageSrc: string = 'https://www.thomas-schulte.de/pics/es6-module.png';
+  protected readonly items: Record<'name' | 'type', unknown>[] = [
+    {
+      name: 'Item 1',
+      type: 'odd',
+    }, {
+      name: 'Item 2',
+      type: 'even',
+    }, {
+      name: 'Item 3',
+      type: 'odd',
+    }, {
+      name: 'Item 4',
+      type: 'even',
+    }
+  ];
 
   constructor() {
     const controller: AbortController = new AbortController();
