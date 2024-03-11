@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import { Observable } from 'rxjs';
+
 export type Posts = {
   id: string;
   title: string;
@@ -26,9 +28,21 @@ export type Data = {
 })
 export class AppService {
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {}
 
-  public getHello() {
-    return this.http.get('/api');
+  public getPosts() {
+    return this.getPayload('/posts');
+  }
+
+  public getComments() {
+    return this.getPayload('/comments');
+  }
+
+  public getProfile() {
+    return this.getPayload('/profile');
+  }
+
+  private getPayload(path: string): Observable<Object> {
+    return this.http.get(path);
   }
 }

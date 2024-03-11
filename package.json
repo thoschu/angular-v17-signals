@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "npm run frontend & npm run backend",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "server": "npx json-server db.json5"
+    "frontend": "ng serve",
+    "backend": "npx json-server db.json5"
   },
   "private": true,
   "dependencies": {
