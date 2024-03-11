@@ -30,19 +30,19 @@ export class AppService {
 
   constructor(private readonly http: HttpClient) {}
 
-  public getPosts() {
-    return this.getPayload('/posts');
+  public getPosts(): Observable<Posts>  {
+    return this.getPayload<Posts>('/posts');
   }
 
-  public getComments() {
-    return this.getPayload('/comments');
+  public getComments(): Observable<Comments>  {
+    return this.getPayload<Comments>('/comments');
   }
 
-  public getProfile() {
-    return this.getPayload('/profile');
+  public getProfile(): Observable<Profile> {
+    return this.getPayload<Profile>('/profile');
   }
 
-  private getPayload(path: string): Observable<Object> {
-    return this.http.get(path);
+  private getPayload<T>(path: string): Observable<T> {
+    return this.http.get<T>(path);
   }
 }
