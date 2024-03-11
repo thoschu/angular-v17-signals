@@ -42,7 +42,7 @@ export class AppService {
     return this.getPayload<Profile>('/profile');
   }
 
-  private getPayload<T>(path: string): Observable<T> {
-    return this.http.get<T>(path);
+  private getPayload<T>(uri: string): Observable<T> {
+    return this.http.get<T>(`/api${uri}`);
   }
 }

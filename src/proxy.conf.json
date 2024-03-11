@@ -6,25 +6,25 @@
       "^/api": ""
     }
   },
-  "/posts": {
+  "/api/posts": {
     "target": "http://localhost:3000/posts",
     "secure": false,
     "pathRewrite": {
-      "^/posts": ""
+      "^/api/posts": ""
     }
   },
-  "/comments": {
+  "/api/comments": {
     "target": "http://localhost:3000/comments",
     "secure": false,
     "pathRewrite": {
-      "^/comments": ""
+      "^/api/comments": ""
     }
   },
-  "/profile": {
+  "/api/profile": {
     "target": "http://localhost:3000/profile",
     "secure": false,
     "pathRewrite": {
-      "^/profile": ""
+      "^/api/profile": ""
     }
   }
 }
