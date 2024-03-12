@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { fromEvent, interval, Observable, Subscription, timer } from 'rxjs';
+import { fromEvent, interval, noop, Observable, Subscription, timer } from 'rxjs';
 
-import { AppService } from './app.service';
+import { AppService, Posts } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -15,9 +15,11 @@ export class AppComponent implements OnInit {
   public title: string = 'angular-v17-signals';
 
   constructor(private readonly appService: AppService) {
-    appService.getProfile().subscribe((data: Object): void => {
-        console.log(data);
-    });
+    appService.getPosts().subscribe(
+        (value: Posts): void => console.dir(value),
+        noop,
+        (): void => console.info('complete')
+    );
   }
 
   public ngOnInit(): void {

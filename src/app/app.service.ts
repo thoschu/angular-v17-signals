@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import {Observable, Observer} from 'rxjs';
 
 export type Posts = {
   id: string;
@@ -31,7 +31,17 @@ export class AppService {
   constructor(private readonly http: HttpClient) {}
 
   public getPosts(): Observable<Posts>  {
-    return this.getPayload<Posts>('/posts');
+    const promise: Promise<Response> = fetch('/api/posts');
+
+    return Observable.create((observer: Observer<Posts>): void => {
+      promise
+        .then((res: Response) => res.json())
+        .then(async (promise: Promise<Posts>): Promise<Posts> => await promise)
+        .then((posts: Posts): void => observer.next(posts))
+        .then((): void => observer.complete())
+        .catch((err: Error): void => observer.error(err));
+      }
+    );
   }
 
   public getComments(): Observable<Comments>  {
