@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
 
   constructor(private readonly appService: AppService) {
     appService.getPosts().subscribe(
-        (value: Posts): void => console.dir(value),
+        console.dir,
         noop,
         (): void => console.info('complete')
     );
