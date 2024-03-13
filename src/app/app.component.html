@@ -331,6 +331,19 @@
         </p>
     </div>
     <hr>
+    <div *ngIf="commentsFilteredLess$ | async as comments">
+        <p *ngFor="let comment of comments; trackBy: trackByCommentId; index as i">
+            {{ i + 1 }}. {{ comment.text }}: {{ comment.postId }}
+        </p>
+    </div>
+    <hr>
+    <div *ngIf="commentsFilteredGreater$ | async as comments">
+        <p *ngFor="let comment of comments; trackBy: trackByCommentId; index as i">
+            {{ i + 1 }}. {{ comment.text }}: {{ comment.postId }}
+        </p>
+    </div>
+    <hr>
+    <hr>
     @if(posts$ | async; as posts) {
         @for (post of posts; track trackByPostId; let i = $index;) {
             <p class="post" data-id="{{ post.id }}">
