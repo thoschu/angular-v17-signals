@@ -53,8 +53,10 @@ export class AppComponent implements OnInit {
     const source2$: Observable<string> = of<string[]>('A', 'B', 'C', 'D', 'E');
     const source3$: Observable<boolean> = of<boolean[]>(true, false, true, true, false);
     const source4$: Observable<boolean> = of();
-    const result$: Observable<string | number | boolean> = concat<[/*number,*/ number, string, boolean]>(/*source0$,*/ source1$, source2$, source3$);
-    const subscribe: Subscription = result$.subscribe(console.log);
+    const resultConcat$: Observable<string | number | boolean> = concat<[/*number,*/ number, string, boolean]>(/*source0$,*/ source1$, source2$, source3$);
+    const subscribe: Subscription = resultConcat$.subscribe(console.log);
+
+    // const resultConcatMap$;
 
     // appService.getPosts().pipe(
     //     tap(console.dir)
