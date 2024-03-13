@@ -1,7 +1,20 @@
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { concat, fromEvent, interval, map, noop, Observable, of, shareReplay, Subscription, tap, timer } from 'rxjs';
+import {
+  concat,
+  filter,
+  fromEvent,
+  interval,
+  map,
+  noop,
+  Observable,
+  of,
+  shareReplay,
+  Subscription,
+  tap,
+  timer
+} from 'rxjs';
 import { gt, lt } from 'ramda';
 
 import { AppService, Comment, Comments, Post, Posts } from './app.service';
@@ -54,7 +67,10 @@ export class AppComponent implements OnInit {
     const source3$: Observable<boolean> = of<boolean[]>(true, false, true, true, false);
     const source4$: Observable<boolean> = of();
     const resultConcat$: Observable<string | number | boolean> = concat<[/*number,*/ number, string, boolean]>(/*source0$,*/ source1$, source2$, source3$);
-    const subscribe: Subscription = resultConcat$.subscribe(console.log);
+    const subscribe: Subscription = resultConcat$.pipe(filter((val: string | number | boolean): boolean => {
+      // console.log(val);
+      return true ?? val === true;
+    })).subscribe(console.log);
 
     // const resultConcatMap$;
 
