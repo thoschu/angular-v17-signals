@@ -1,10 +1,10 @@
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {concat, fromEvent, interval, map, noop, Observable, of, shareReplay, Subscription, tap, timer} from 'rxjs';
-import {} from 'ramda';
+import { concat, fromEvent, interval, map, noop, Observable, of, shareReplay, Subscription, tap, timer } from 'rxjs';
+import { gt, lt } from 'ramda';
 
-import { AppService, Comment, Comments, Post, Posts, /*Comments, Posts, Profile*/ } from './app.service';
+import { AppService, Comment, Comments, Post, Posts } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -20,12 +20,12 @@ export class AppComponent implements OnInit {
   protected readonly posts$: Observable<Posts> = this.appService.getPosts();
   protected readonly postsFilteredGreaterThan$: Observable<Posts> = this._posts$.pipe(
       map(
-          (posts: Posts) => posts.filter((post: Post): boolean => post.views > 200)
+          (posts: Posts) => posts.filter((post: Post): boolean => gt<number>(post.views, 200))
       )
   );
   protected readonly postsFilteredLessThan$: Observable<Posts> = this._posts$.pipe(
       map(
-          (posts: Posts) => posts.filter((post: Post): boolean => post.views < 300)
+          (posts: Posts) => posts.filter((post: Post): boolean => lt<number>(post.views, 300))
       )
   );
   protected readonly comments$: Observable<Comments> = this.appService.getComments()
@@ -49,9 +49,10 @@ export class AppComponent implements OnInit {
 
     // a observable has to complete in terms of concat operator
     const source0$: Observable<number> = interval(1000);
-    const source1$: Observable<number> = of(1, 2, 3, 4, 5);
-    const source2$: Observable<string> = of('A', 'B', 'C', 'D', 'E');
-    const source3$: Observable<boolean> = of(true, false, true, true, false);
+    const source1$: Observable<number> = of<number[]>(1, 2, 3, 4, 5);
+    const source2$: Observable<string> = of<string[]>('A', 'B', 'C', 'D', 'E');
+    const source3$: Observable<boolean> = of<boolean[]>(true, false, true, true, false);
+    const source4$: Observable<boolean> = of();
     const result$: Observable<string | number | boolean> = concat<[/*number,*/ number, string, boolean]>(/*source0$,*/ source1$, source2$, source3$);
     const subscribe: Subscription = result$.subscribe(console.log);
 
