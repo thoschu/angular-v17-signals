@@ -323,9 +323,25 @@
     </div>
   </div>
 </main>
-<!--<footer>-->
-<!--    @for (item of foo; track item.title) {}-->
-<!--</footer>-->
+<footer>
+
+<!--    <div *ngIf="posts$ | async as posts">-->
+<!--        <p *ngFor="let post of posts; trackBy: trackById; index as i">-->
+<!--            {{ i + 1 }}. {{ post.title }}: {{ post.views }}-->
+<!--        </p>-->
+<!--    </div>-->
+
+    @if(posts$ | async; as posts) {
+        @for (post of posts; track trackById; let i = $index;) {
+            <p class="post" data-id="{{ post.id }}">
+                {{ i }}. {{ post.title }}: {{ post.views }}
+            </p>
+        }  @empty {
+            <p>No results yet!</p>
+        }
+    }
+
+</footer>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
@@ -337,3 +353,90 @@
 
 
 <router-outlet />
+
+<!--
+<footer>
+  <h1 *ngIf="true" i18n="first foo | blablabla">Template Control flow Primitives</h1>
+  @for (item of loremIpsumArray;
+    track trackBy;
+    let index = $index;
+    let first = $first;
+    let last = $last;
+    let even = $even;
+    let odd = $odd;
+    let count = $count;
+  ) {
+    <div
+      [class.is-first]="first"
+      [class.is-last]="last"
+      [class.is-odd]="odd"
+      [class.is-even]="even"
+    >
+      <p [style.text-decoration]="'underline'">{{ item.id }} / {{ index }}</p>
+      <p>{{ item.text }} # <span [ngStyle]="{ 'font-weight': 900 }">{{ count }}</span></p>
+      <p i18n="mama papa|foo bar baz@@popelTestId">auauauauaua</p>
+    </div>
+  } @empty {
+    <p style="color: red;">No items found</p>
+  }
+</footer>
+@if (loremIpsumArray) {
+  <h2>!!!!!!!!!!!!!!!!!!</h2>
+} @else if (!loremIpsumArray) {
+  <h2>Goodbye</h2>
+} @else {
+  <h2>???????????????</h2>
+}
+<hr>
+
+<ng-template [ngIf]="loremIpsumArray[loremIpsumArray.length - 1]" let-last>
+  <aside>
+    <code>{{last | json}}</code>
+  </aside>
+</ng-template>
+<aside *ngIf="loremIpsumArray[0] as first">
+  <code>{{first | json}}</code>
+</aside>
+
+<hr>
+<aside *ngIf="loremIpsumArray" style="background-color: grey;">
+  <ng-template #blankName let-name="description">
+    <p>{{ name }}</p>
+    <p>2024</p>
+  </ng-template>
+  <ng-container *ngTemplateOutlet="blankName; context: { description: 'Tom' }" />
+  <hr>
+  <hr>
+  <ng-container *transloco="let t">
+    <p>{{ t('foo') }}</p>
+  </ng-container>
+  <span>{{ 'bar' | transloco }}</span>
+  <hr>
+  <span transloco="language"></span>
+  <br>
+  <hr>
+  @switch (condition) {
+    @case ('caseA') {
+      <app-items #appAppDirectiveRef="aaD" [appAppDirective]="false" (onHover)="checkHover($event)" [blankNameTempl]="blankName" [name]="'Tom'">
+        <code (dblclick)="appAppDirectiveRef.toggle()">Case A.</code>
+        <i>foo</i>
+        <ng-container class="container" *ngTemplateOutlet="blankName; context: { description: 'Hamburg' }" />
+      </app-items>
+    }
+    @case ('caseB') {
+      <app-items style="background-color: aquamarine;" #appAppDirectiveRef="aaD" [appAppDirective]="false" (onHover)="checkHover($event)" [blankNameTempl]="blankName" [name]="'Thomas'">
+        <code (dblclick)="appAppDirectiveRef.toggle()">Case B.</code>
+        <i>bar</i>
+        <ng-container class="container" *ngTemplateOutlet="blankName; context: { description: 'Berlin' }" />
+      </app-items>
+    }
+    @default {
+      <app-items #appAppDirectiveRef="aaD" [appAppDirective]="false" (onHover)="checkHover($event)"    [blankNameTempl]="blankName" [name]="'Schulte'">
+        <code (dblclick)="appAppDirectiveRef.toggle()">DEFAULT</code>
+        <i>baz</i>
+        <ng-container class="container" *ngTemplateOutlet="blankName; context: { description: 'Bielefeld' }" />
+      </app-items>
+    }
+  }
+</aside>
+-->
