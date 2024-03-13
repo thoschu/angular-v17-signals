@@ -323,16 +323,16 @@
     </div>
   </div>
 </main>
+<hr>
 <footer>
-
-<!--    <div *ngIf="posts$ | async as posts">-->
-<!--        <p *ngFor="let post of posts; trackBy: trackById; index as i">-->
-<!--            {{ i + 1 }}. {{ post.title }}: {{ post.views }}-->
-<!--        </p>-->
-<!--    </div>-->
-
+    <div *ngIf="comments$ | async as comments">
+        <p *ngFor="let comment of comments; trackBy: trackByCommentId; index as i">
+            {{ i + 1 }}. {{ comment.text }}: {{ comment.postId }}
+        </p>
+    </div>
+    <hr>
     @if(posts$ | async; as posts) {
-        @for (post of posts; track trackById; let i = $index;) {
+        @for (post of posts; track trackByPostId; let i = $index;) {
             <p class="post" data-id="{{ post.id }}">
                 {{ i }}. {{ post.title }}: {{ post.views }}
             </p>

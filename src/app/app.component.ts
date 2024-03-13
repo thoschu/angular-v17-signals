@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { fromEvent, interval, map, noop, Observable, Subscription, tap, timer } from 'rxjs';
 
-import {AppService, Post, /*Comments, Posts, Profile*/} from './app.service';
+import {AppService, Comment, Comments, Post, Posts, /*Comments, Posts, Profile*/} from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -15,8 +15,8 @@ import {AppService, Post, /*Comments, Posts, Profile*/} from './app.service';
 export class AppComponent implements OnInit {
   public readonly title: string = 'angular-v17-signals';
   private readonly click$: Observable<Event> = fromEvent<Event>(document, 'click');
-  protected readonly posts$:  Observable<any> = this.appService.getPosts();
-  protected readonly comments$: Observable<any> = this.appService.getComments();
+  protected readonly posts$:  Observable<Posts> = this.appService.getPosts();
+  protected readonly comments$: Observable<Comments> = this.appService.getComments();
 
   constructor(private readonly appService: AppService) {
     appService.getPosts().pipe(
@@ -75,7 +75,11 @@ export class AppComponent implements OnInit {
     // }
   }
 
-  protected trackById(index: number, post: Post) { // 👈
+  protected trackByPostId(index: number, post: Post): number {
     return post.id;
+  }
+
+  protected trackByCommentId(index: number, comment: Comment): number {
+    return comment.id;
   }
 }

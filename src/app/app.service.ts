@@ -1,27 +1,25 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import {Observable, Observer} from 'rxjs';
+import { Observable, Observer } from 'rxjs';
 
-export type Posts = {
-  id: string;
+export type Post = {
+  id: number;
   title: string;
   views: number;
 };
 
-export type Comments = {
-  id: string;
+export type Posts = ReadonlyArray<Post>;
+
+export type Comment = {
+  id: number;
   text: string;
   postId: string;
 };
 
-export type Profile = Record<'name', string>;
+export type Comments = ReadonlyArray<Comment>;
 
-export type Data = {
-  posts: Posts[];
-  comments: Comments[];
-  profile: Profile;
-};
+export type Profile = Readonly<Record<'email', string>>;
 
 @Injectable({
   providedIn: 'root'
