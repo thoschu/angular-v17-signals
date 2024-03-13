@@ -1,7 +1,7 @@
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {fromEvent, interval, map, noop, Observable, shareReplay, Subscription, tap, timer} from 'rxjs';
+import {concat, fromEvent, interval, map, noop, Observable, of, shareReplay, Subscription, tap, timer} from 'rxjs';
 import {} from 'ramda';
 
 import { AppService, Comment, Comments, Post, Posts, /*Comments, Posts, Profile*/ } from './app.service';
@@ -46,6 +46,14 @@ export class AppComponent implements OnInit {
   constructor(private readonly appService: AppService) {
     this.commentsFilteredLess$.subscribe(noop);
     this.commentsFilteredGreater$.subscribe(noop);
+
+    // a observable has to complete in terms of concat operator
+    const source0$: Observable<number> = interval(1000);
+    const source1$: Observable<number> = of(1, 2, 3, 4, 5);
+    const source2$: Observable<string> = of('A', 'B', 'C', 'D', 'E');
+    const source3$: Observable<boolean> = of(true, false, true, true, false);
+    const result$: Observable<string | number | boolean> = concat<[/*number,*/ number, string, boolean]>(/*source0$,*/ source1$, source2$, source3$);
+    const subscribe: Subscription = result$.subscribe(console.log);
 
     // appService.getPosts().pipe(
     //     tap(console.dir)
