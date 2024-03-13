@@ -340,7 +340,26 @@
             <p>No results yet!</p>
         }
     }
-
+    <hr>
+    @if(postsFilteredGreaterThan$ | async; as posts) {
+        @for (post of posts; track trackByPostId; let i = $index;) {
+            <p class="post" data-id="{{ post.id }}">
+                {{ i }}. {{ post.title }}: {{ post.views }}
+            </p>
+        }  @empty {
+            <p>No results yet!</p>
+        }
+    }
+    <hr>
+    @if(postsFilteredLessThan$ | async; as posts) {
+        @for (post of posts; track trackByPostId; let i = $index;) {
+            <p class="post" data-id="{{ post.id }}">
+                {{ i }}. {{ post.title }}: {{ post.views }}
+            </p>
+        }  @empty {
+            <p>No results yet!</p>
+        }
+    }
 </footer>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->

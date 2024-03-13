@@ -1,9 +1,10 @@
-import {AsyncPipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
+import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { fromEvent, interval, map, noop, Observable, Subscription, tap, timer } from 'rxjs';
+import {} from 'ramda';
 
-import {AppService, Comment, Comments, Post, Posts, /*Comments, Posts, Profile*/} from './app.service';
+import { AppService, Comment, Comments, Post, Posts, /*Comments, Posts, Profile*/ } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,16 @@ export class AppComponent implements OnInit {
   public readonly title: string = 'angular-v17-signals';
   private readonly click$: Observable<Event> = fromEvent<Event>(document, 'click');
   protected readonly posts$:  Observable<Posts> = this.appService.getPosts();
+  protected readonly postsFilteredGreaterThan$: Observable<Posts> = this.appService.getPosts().pipe(
+      map(
+          (posts: Posts) => posts.filter((post: Post): boolean => post.views > 200)
+      )
+  );
+  protected readonly postsFilteredLessThan$: Observable<Posts> = this.appService.getPosts().pipe(
+      map(
+          (posts: Posts) => posts.filter((post: Post): boolean => post.views < 300)
+      )
+  );
   protected readonly comments$: Observable<Comments> = this.appService.getComments();
 
   constructor(private readonly appService: AppService) {

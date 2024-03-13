@@ -3,7 +3,7 @@
     { "id": 1, "title": "a title", "views": 100 },
     { "id": 2, "title": "another title a", "views": 200 },
     { "id": 3, "title": "another title b", "views": 300 },
-    { "id": 4, "title": "another title c", "views": 200 },
+    { "id": 4, "title": "another title c", "views": 250 },
     { "id": 5, "title": "another title d", "views": 400 },
     { "id": 6, "title": "another title e", "views": 200 },
     { "id": 7, "title": "another title f", "views": 500 },
