@@ -2,11 +2,11 @@ import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {
-  concat,
+  concat, concatMap,
   filter,
   fromEvent,
   interval,
-  map,
+  map, merge,
   noop,
   Observable,
   of,
@@ -60,17 +60,32 @@ export class AppComponent implements OnInit {
     this.commentsFilteredLess$.subscribe(noop);
     this.commentsFilteredGreater$.subscribe(noop);
 
-    // a observable has to complete in terms of concat operator
+    // ❗ a observable has to complete in terms of: concat operator
     const source0$: Observable<number> = interval(1000);
     const source1$: Observable<number> = of<number[]>(1, 2, 3, 4, 5);
     const source2$: Observable<string> = of<string[]>('A', 'B', 'C', 'D', 'E');
     const source3$: Observable<boolean> = of<boolean[]>(true, false, true, true, false);
     const source4$: Observable<boolean> = of();
+    // 📍 https://reactivex.io/documentation/operators/concat.html
     const resultConcat$: Observable<string | number | boolean> = concat<[/*number,*/ number, string, boolean]>(/*source0$,*/ source1$, source2$, source3$);
     const subscribe: Subscription = resultConcat$.pipe(filter((val: string | number | boolean): boolean => {
       // console.log(val);
       return true ?? val === true;
     })).subscribe(console.log);
+
+    // source0$.pipe(
+    //     filter((value: number): boolean => {
+    //       return value > 5;
+    //     }),
+    //     // ❗ combining the result of the first observable with the second observable. waiting for second observable to complete before subscribing to the next observable value from the first
+    //     concatMap((value: number) => of<number>(value * 10)),
+    //     // map((value: number) => of(value * 10)),
+    //     map((value: number) => value * 10),
+    // ).subscribe(console.log);
+
+    // 📍 https://reactivex.io/documentation/operators/merge.html
+    const resultMerge$: Observable<any> = merge(interval(1000), interval(3000), interval(2000));
+    resultMerge$.subscribe(console.log);
 
     // const resultConcatMap$;
 
@@ -96,7 +111,7 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // http://callbackhell.com/
+    // 📍 http://callbackhell.com/
     // document.addEventListener('click', (evt: Event): void => {
     //   console.log(evt);
     //   setTimeout((): void => {
