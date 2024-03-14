@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, Observer } from 'rxjs';
-import {fromPromise} from "rxjs/internal/observable/innerFrom";
+import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 
 export type Post = {
   id: number;
@@ -30,7 +30,7 @@ export class AppService {
   constructor(private readonly http: HttpClient) {}
 
   public getPosts(): Observable<Posts>  {
-    // fromPromise(fetch('/api/posts', { method: 'GET' }));
+    // 📌 fromPromise(fetch('/api/posts', { method: 'GET' }));
     const promise: Promise<Response> = fetch('/api/posts', { method: 'GET' });
 
     return Observable.create((observer: Observer<Posts>): void => {

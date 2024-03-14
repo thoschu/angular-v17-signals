@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
     this.commentsFilteredLess$.subscribe(noop);
     this.commentsFilteredGreater$.subscribe(noop);
 
-    // ❗ a observable has to complete in terms of: concat operator
+    // 📌 a observable has to complete in terms of: concat operator
     const source0$: Observable<number> = interval(1000);
     const source1$: Observable<number> = of<number[]>(1, 2, 3, 4, 5);
     const source2$: Observable<string> = of<string[]>('A', 'B', 'C', 'D', 'E');
@@ -77,14 +77,18 @@ export class AppComponent implements OnInit {
     //     filter((value: number): boolean => {
     //       return value > 5;
     //     }),
-    //     // ❗ combining the result of the first observable with the second observable. waiting for second observable to complete before subscribing to the next observable value from the first
+    //     // 📌 combining the result of the first observable with the second observable. waiting for second observable to complete before subscribing to the next observable value from the first
     //     concatMap((value: number) => of<number>(value * 10)),
     //     // map((value: number) => of(value * 10)),
     //     map((value: number) => value * 10),
     // ).subscribe(console.log);
 
     // 📍 https://reactivex.io/documentation/operators/merge.html
-    const resultMerge$: Observable<any> = merge(interval(1000), interval(3000), interval(2000));
+    const resultMerge$: Observable<any> = merge(
+      interval(1000).pipe(map((val: number): string => `${val}###`)),
+      interval(3000).pipe(map((val: number): string => `${val}...`)),
+      interval(2000).pipe(map((val: number): string => `${val}+++`))
+    );
     resultMerge$.subscribe(console.log);
 
     // const resultConcatMap$;
