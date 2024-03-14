@@ -121,14 +121,14 @@ export class AppComponent implements OnInit {
     //     (): void => console.info('complete')
     // );
 
-    // 📌 exhaustMap: ignores or allows new 'input' (from the outer), if the inner observable completed
+    // 📌 exhaustMap: ignores new 'input' (from the outer), until the inner observable completed
     // const result$: Observable<number> = this.click$.pipe(
     //     exhaustMap((evt: Event) => interval(1000).pipe(take(5)))
     // );
     // result$.subscribe(console.log);
     //
     interval(1000).pipe(
-        exhaustMap((value: number) => interval(1000).pipe(take(5), map((val: number) => `${val}---${value}`)))
+        exhaustMap((value: number) => interval(1000).pipe(take(5), map((val: number): string => `${val}---${value}`)))
     ).subscribe(console.log);
   }
 
