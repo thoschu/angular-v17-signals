@@ -1,10 +1,9 @@
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {Event, RouterOutlet} from '@angular/router';
 import {
-  concat, concatMap, delay, exhaustMap, filter, fromEvent, interval,
-  map, merge, mergeMap, noop, Observable, of,
-  shareReplay, Subscription, switchMap, take, tap, timer
+  concat, concatMap, debounceTime, delay, distinctUntilChanged, exhaustMap, filter, fromEvent, interval,
+  map, merge, mergeMap, noop, Observable, of, shareReplay, Subscription, switchMap, take, tap, timer
 } from 'rxjs';
 import { gt, lt } from 'ramda';
 
@@ -17,7 +16,7 @@ import { AppService, Comment, Comments, Post, Posts } from './app.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements AfterViewInit, OnInit {
   public readonly title: string = 'angular-v17-signals';
   private readonly click$: Observable<Event> = fromEvent<Event>(document, 'click');
   private readonly _posts$: Observable<Posts> = this.appService.getPosts().pipe(shareReplay());
@@ -47,20 +46,28 @@ export class AppComponent implements OnInit {
       return comment.id > 2;
     })));
 
-  constructor(private readonly appService: AppService) {
+  @ViewChild('nameInput')
+  protected readonly nameInput!: ElementRef<HTMLInputElement>;
+
+  constructor(private readonly renderer: Renderer2, private readonly appService: AppService) {
     this.commentsFilteredLess$.subscribe(noop);
     this.commentsFilteredGreater$.subscribe(noop);
 
     // 📌📌📌 switchMap: projects each source value to an observable which is merged in the output observable, emitting values only from the most recently projected observable.
     // 📍 https://rxjs.dev/api/index/function/switchMap
-    this.click$.pipe(switchMap((evt: Event) => interval(1000))).subscribe(console.log);
+    // this.click$.pipe(switchMap((evt: Event) => interval(1000))).subscribe(console.log);
 
     // 📌 a observable has to complete in terms of: concat operator
     const source0$: Observable<number> = interval(1000);
     const source1$: Observable<number> = of<number[]>(1, 2, 3, 4, 5);
     const source2$: Observable<string> = of<string[]>('A', 'B', 'C', 'D', 'E');
     const source3$: Observable<boolean> = of<boolean[]>(true, false, true, true, false);
-    const source4$: Observable<boolean> = of();
+    const source4$: Observable<number> = of(1,1,1,1,1,1,1, 7, 1,1,1);
+
+    // 📌📌📌 distinctUntilChanged: returns a result observable that emits all values pushed by the source observable if they are distinct in comparison to the last value the result observable emitted.
+    // 📍 https://rxjs.dev/api/operators/distinctUntilChanged
+    // source4$.pipe(distinctUntilChanged()).subscribe(console.log);
+
     // 📍 https://reactivex.io/documentation/operators/concat.html
     const resultConcat$: Observable<string | number | boolean> = concat<[/*number,*/ number, string, boolean]>(/*source0$,*/ source1$, source2$, source3$);
     // const subscribe: Subscription = resultConcat$.pipe(filter((val: string | number | boolean): boolean => {
@@ -161,6 +168,24 @@ export class AppComponent implements OnInit {
     //       tap(console.log)
     //   ).subscribe(noop));
     // }
+  }
+
+  public ngAfterViewInit(): void {
+    const inputElement: HTMLInputElement = this.nameInput.nativeElement;
+    this.renderer.setStyle(inputElement, 'background', 'yellow');
+
+    const input$: Observable<KeyboardEvent> = fromEvent<KeyboardEvent>(inputElement, 'keyup');
+    // 📌📌📌 distinctUntilChanged
+    // 📍 https://www.learnrxjs.io/learn-rxjs/operators/filtering/distinctuntilchanged
+    // 📌📌📌 debounceTime
+    // 📍 https://www.learnrxjs.io/learn-rxjs/operators/filtering/debouncetime
+    input$.pipe(
+      map((evt: KeyboardEvent) => evt.target),
+        map((target: EventTarget | null) => target as HTMLInputElement),
+        map((element: HTMLInputElement) => element.value),
+      distinctUntilChanged(),
+      debounceTime(1000),
+    ).subscribe(console.log);
   }
 
   protected trackByPostId(index: number, post: Post): number {
