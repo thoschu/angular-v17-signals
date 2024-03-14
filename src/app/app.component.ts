@@ -2,16 +2,16 @@ import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {
-  concat, concatMap,
+  concat, concatMap, delay, exhaustMap,
   filter,
   fromEvent,
   interval,
-  map, merge,
+  map, merge, mergeMap,
   noop,
   Observable,
   of,
   shareReplay,
-  Subscription,
+  Subscription, take,
   tap,
   timer
 } from 'rxjs';
@@ -68,28 +68,36 @@ export class AppComponent implements OnInit {
     const source4$: Observable<boolean> = of();
     // 📍 https://reactivex.io/documentation/operators/concat.html
     const resultConcat$: Observable<string | number | boolean> = concat<[/*number,*/ number, string, boolean]>(/*source0$,*/ source1$, source2$, source3$);
-    const subscribe: Subscription = resultConcat$.pipe(filter((val: string | number | boolean): boolean => {
-      // console.log(val);
-      return true ?? val === true;
-    })).subscribe(console.log);
+    // const subscribe: Subscription = resultConcat$.pipe(filter((val: string | number | boolean): boolean => {
+    //   // console.log(val);
+    //   return true ?? val === true;
+    // })).subscribe(console.log);
 
+    // 📌 mergeMap: works not sequentially, it doesn't wait that the previous observable has completed like concatMap
+    // 📍 https://rxjs.dev/api/operators/mergeMap
+    // source0$.pipe(
+    //     mergeMap((value: number) => of(value).pipe(delay<number>(Math.random() * (7000 - 700) + 700))),
+    //     map((value: number): string => `${value}`)
+    // ).subscribe(console.log);
+
+    // 📍 https://rxjs.dev/api/operators/concatMap
     // source0$.pipe(
     //     filter((value: number): boolean => {
     //       return value > 5;
     //     }),
-    //     // 📌 combining the result of the first observable with the second observable. waiting for second observable to complete before subscribing to the next observable value from the first
+    //     // 📌 concatMap works sequentially: combining the result of the first observable with the second observable. waiting for second observable to complete before subscribing to the next observable value from the first
     //     concatMap((value: number) => of<number>(value * 10)),
     //     // map((value: number) => of(value * 10)),
     //     map((value: number) => value * 10),
     // ).subscribe(console.log);
 
     // 📍 https://reactivex.io/documentation/operators/merge.html
-    const resultMerge$: Observable<any> = merge(
-      interval(1000).pipe(map((val: number): string => `${val}###`)),
-      interval(3000).pipe(map((val: number): string => `${val}...`)),
-      interval(2000).pipe(map((val: number): string => `${val}+++`))
-    );
-    resultMerge$.subscribe(console.log);
+    // const resultMerge$: Observable<any> = merge(
+    //   interval(1000).pipe(map((val: number): string => `${val}###`)),
+    //   interval(3000).pipe(map((val: number): string => `${val}...`)),
+    //   interval(2000).pipe(map((val: number): string => `${val}+++`))
+    // );
+    // resultMerge$.subscribe(console.log);
 
     // const resultConcatMap$;
 
@@ -112,6 +120,16 @@ export class AppComponent implements OnInit {
     //     noop,
     //     (): void => console.info('complete')
     // );
+
+    // 📌 exhaustMap: ignores or allows new 'input' (from the outer), if the inner observable completed
+    // const result$: Observable<number> = this.click$.pipe(
+    //     exhaustMap((evt: Event) => interval(1000).pipe(take(5)))
+    // );
+    // result$.subscribe(console.log);
+    //
+    interval(1000).pipe(
+        exhaustMap((value: number) => interval(1000).pipe(take(5), map((val: number) => `${val}---${value}`)))
+    ).subscribe(console.log);
   }
 
   public ngOnInit(): void {
