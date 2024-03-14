@@ -4,7 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import {
   concat, concatMap, delay, exhaustMap, filter, fromEvent, interval,
   map, merge, mergeMap, noop, Observable, of,
-  shareReplay, Subscription, take, tap, timer
+  shareReplay, Subscription, switchMap, take, tap, timer
 } from 'rxjs';
 import { gt, lt } from 'ramda';
 
@@ -51,7 +51,9 @@ export class AppComponent implements OnInit {
     this.commentsFilteredLess$.subscribe(noop);
     this.commentsFilteredGreater$.subscribe(noop);
 
-    this.click$.pipe().subscribe(console.log);
+    // 📌📌📌 switchMap: projects each source value to an observable which is merged in the output observable, emitting values only from the most recently projected observable.
+    // 📍 https://rxjs.dev/api/index/function/switchMap
+    this.click$.pipe(switchMap((evt: Event) => interval(1000))).subscribe(console.log);
 
     // 📌 a observable has to complete in terms of: concat operator
     const source0$: Observable<number> = interval(1000);
@@ -73,12 +75,12 @@ export class AppComponent implements OnInit {
     //     map((value: number): string => `${value}`)
     // ).subscribe(console.log);
 
+    // 📌📌📌 concatMap: works sequentially, combining the result of the first observable with the second observable. waiting for second observable to complete before subscribing to the next observable value from the first
     // 📍 https://rxjs.dev/api/operators/concatMap
     // source0$.pipe(
     //     filter((value: number): boolean => {
     //       return value > 5;
     //     }),
-    //     // 📌📌📌 concatMap works sequentially: combining the result of the first observable with the second observable. waiting for second observable to complete before subscribing to the next observable value from the first
     //     concatMap((value: number) => of<number>(value * 10)),
     //     // map((value: number) => of(value * 10)),
     //     map((value: number) => value * 10),
@@ -115,6 +117,7 @@ export class AppComponent implements OnInit {
     // );
 
     // 📌📌📌 exhaustMap: ignores new 'input' (from the outer), until the inner observable completed
+    // 📍 https://rxjs.dev/api/operators/exhaustMap
     // const result$: Observable<number> = this.click$.pipe(
     //     exhaustMap((evt: Event) => interval(1000).pipe(take(5)))
     // );
