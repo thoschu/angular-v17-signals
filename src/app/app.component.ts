@@ -2,18 +2,9 @@ import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {
-  concat, concatMap, delay, exhaustMap,
-  filter,
-  fromEvent,
-  interval,
-  map, merge, mergeMap,
-  noop,
-  Observable,
-  of,
-  shareReplay,
-  Subscription, take,
-  tap,
-  timer
+  concat, concatMap, delay, exhaustMap, filter, fromEvent, interval,
+  map, merge, mergeMap, noop, Observable, of,
+  shareReplay, Subscription, take, tap, timer
 } from 'rxjs';
 import { gt, lt } from 'ramda';
 
@@ -32,33 +23,35 @@ export class AppComponent implements OnInit {
   private readonly _posts$: Observable<Posts> = this.appService.getPosts().pipe(shareReplay());
   protected readonly posts$: Observable<Posts> = this.appService.getPosts();
   protected readonly postsFilteredGreaterThan$: Observable<Posts> = this._posts$.pipe(
-      map(
-          (posts: Posts) => posts.filter((post: Post): boolean => gt<number>(post.views, 200))
-      )
+    map(
+      (posts: Posts) => posts.filter((post: Post): boolean => gt<number>(post.views, 200))
+    )
   );
   protected readonly postsFilteredLessThan$: Observable<Posts> = this._posts$.pipe(
-      map(
-          (posts: Posts) => posts.filter((post: Post): boolean => lt<number>(post.views, 300))
-      )
+    map(
+      (posts: Posts) => posts.filter((post: Post): boolean => lt<number>(post.views, 300))
+    )
   );
   protected readonly comments$: Observable<Comments> = this.appService.getComments()
-      .pipe(
-          shareReplay(),
-          tap(console.log) // ❗❗❗
-      );
+    .pipe(
+      shareReplay(),
+      tap(console.log) // ❗❗❗
+    );
   protected readonly commentsFilteredLess$: Observable<Comments> =
-      this.comments$.pipe(map((comments: Comments) => comments.filter((comment: Comment): boolean => {
-        return comment.id < 3;
-      })));
+    this.comments$.pipe(map((comments: Comments) => comments.filter((comment: Comment): boolean => {
+      return comment.id < 3;
+    })));
 
   protected readonly commentsFilteredGreater$: Observable<Comments> =
-      this.comments$.pipe(map((comments: Comments) => comments.filter((comment: Comment): boolean => {
-        return comment.id > 2;
-      })));
+    this.comments$.pipe(map((comments: Comments) => comments.filter((comment: Comment): boolean => {
+      return comment.id > 2;
+    })));
 
   constructor(private readonly appService: AppService) {
     this.commentsFilteredLess$.subscribe(noop);
     this.commentsFilteredGreater$.subscribe(noop);
+
+    this.click$.pipe().subscribe(console.log);
 
     // 📌 a observable has to complete in terms of: concat operator
     const source0$: Observable<number> = interval(1000);
@@ -73,7 +66,7 @@ export class AppComponent implements OnInit {
     //   return true ?? val === true;
     // })).subscribe(console.log);
 
-    // 📌 mergeMap: works not sequentially, it doesn't wait that the previous observable has completed like concatMap
+    // 📌📌📌 mergeMap: works not sequentially, it doesn't wait that the previous observable has completed like concatMap
     // 📍 https://rxjs.dev/api/operators/mergeMap
     // source0$.pipe(
     //     mergeMap((value: number) => of(value).pipe(delay<number>(Math.random() * (7000 - 700) + 700))),
@@ -85,7 +78,7 @@ export class AppComponent implements OnInit {
     //     filter((value: number): boolean => {
     //       return value > 5;
     //     }),
-    //     // 📌 concatMap works sequentially: combining the result of the first observable with the second observable. waiting for second observable to complete before subscribing to the next observable value from the first
+    //     // 📌📌📌 concatMap works sequentially: combining the result of the first observable with the second observable. waiting for second observable to complete before subscribing to the next observable value from the first
     //     concatMap((value: number) => of<number>(value * 10)),
     //     // map((value: number) => of(value * 10)),
     //     map((value: number) => value * 10),
@@ -121,15 +114,15 @@ export class AppComponent implements OnInit {
     //     (): void => console.info('complete')
     // );
 
-    // 📌 exhaustMap: ignores new 'input' (from the outer), until the inner observable completed
+    // 📌📌📌 exhaustMap: ignores new 'input' (from the outer), until the inner observable completed
     // const result$: Observable<number> = this.click$.pipe(
     //     exhaustMap((evt: Event) => interval(1000).pipe(take(5)))
     // );
     // result$.subscribe(console.log);
     //
-    interval(1000).pipe(
-        exhaustMap((value: number) => interval(1000).pipe(take(5), map((val: number): string => `${val}---${value}`)))
-    ).subscribe(console.log);
+    // interval(1000).pipe(
+    //     exhaustMap((value: number) => interval(1000).pipe(take(5), map((val: number): string => `${val}---${value}`)))
+    // ).subscribe(console.log);
   }
 
   public ngOnInit(): void {

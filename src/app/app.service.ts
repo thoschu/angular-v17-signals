@@ -31,17 +31,22 @@ export class AppService {
 
   public getPosts(): Observable<Posts>  {
     // 📌 fromPromise(fetch('/api/posts', { method: 'GET' }));
-    const promise: Promise<Response> = fetch('/api/posts', { method: 'GET' });
+    const abortController: AbortController = new AbortController();
+    const signal: AbortSignal = abortController.signal;
 
-    return Observable.create((observer: Observer<Posts>): void => {
+    return Observable.create((observer: Observer<Posts>): () => void => {
+      const promise: Promise<Response> = fetch('/api/posts', { method: 'GET', signal });
+
       promise
         .then((res: Response) => res.json())
         .then(async (promise: Promise<Posts>): Promise<Posts> => await promise)
         .then((posts: Posts): void => observer.next(posts))
         .then((): void => observer.complete())
         .catch((err: Error): void => observer.error(err));
-      }
-    );
+
+      // unsubscribe triggers this fn
+      return (): void => abortController.abort();
+    });
   }
 
   public getComments(): Observable<Comments>  {
