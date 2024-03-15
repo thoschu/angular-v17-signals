@@ -1,9 +1,11 @@
 import { AsyncPipe, JsonPipe, NgForOf, NgIf } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import {Event, RouterOutlet} from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { RouterOutlet } from '@angular/router';
 import {
-  concat, concatMap, debounceTime, delay, distinctUntilChanged, exhaustMap, filter, fromEvent, interval,
-  map, merge, mergeMap, noop, Observable, of, shareReplay, Subscription, switchMap, take, tap, timer
+  catchError, concat, concatMap, debounceTime, delay, distinctUntilChanged, exhaustMap, filter,
+  fromEvent, interval, map, merge, mergeMap, noop, Observable, of, shareReplay, Subscription,
+  switchMap, take, tap, timer
 } from 'rxjs';
 import { gt, lt } from 'ramda';
 
@@ -53,8 +55,20 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.commentsFilteredLess$.subscribe(noop);
     this.commentsFilteredGreater$.subscribe(noop);
 
+    // 📌📌📌 catchError: catches errors on the observable to be handled by returning a new observable or throwing an error.
+    // 📍 https://www.learnrxjs.io/learn-rxjs/operators/error_handling/catch
+    // appService.getError().subscribe(
+    //     () => console.log('error'),
+    //     (err) => console.log(err),
+    //     () => console.log('complete'));
 
-    appService.getError().subscribe(console.log);
+    appService.getError().pipe(
+      tap((val: unknown) => console.log(`###${val}###`)),
+      catchError(
+        (errorResponse: HttpErrorResponse) =>
+          of({ message: `# ${JSON.stringify(errorResponse.error)} #`, email: 'thoschulte@gmail.com' })
+      )
+    ).subscribe((result: any) => console.info(result.email));
 
     // 📌📌📌 switchMap: projects each source value to an observable which is merged in the output observable, emitting values only from the most recently projected observable.
     // 📍 https://rxjs.dev/api/index/function/switchMap

@@ -28,7 +28,7 @@
     }
   },
   "/error": {
-    "target": "http://httpstat.us",
+    "target": "https://user1710514399156.requestly.tech/error500?",
     "secure": false,
     "changeOrigin": true,
     "pathRewrite": {
