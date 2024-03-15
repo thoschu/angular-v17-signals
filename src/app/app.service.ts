@@ -57,7 +57,11 @@ export class AppService {
     return this.getPayload<Profile>('/profile');
   }
 
+  public getError(): Observable<Profile> {
+    return this.getPayload<Profile>('/error');
+  }
+
   private getPayload<T>(uri: string): Observable<T> {
-    return this.http.get<T>(`/api${uri}`);
+    return this.http.get<T>(`${uri}`);
   }
 }

@@ -6,25 +6,33 @@
       "^/api": ""
     }
   },
-  "/api/posts": {
+  "/posts": {
     "target": "http://localhost:3000/posts",
     "secure": false,
     "pathRewrite": {
-      "^/api/posts": ""
+      "^/posts": ""
     }
   },
-  "/api/comments": {
+  "/comments": {
     "target": "http://localhost:3000/comments",
     "secure": false,
     "pathRewrite": {
-      "^/api/comments": ""
+      "^/comments": ""
     }
   },
-  "/api/profile": {
+  "/profile": {
     "target": "http://localhost:3000/profile",
     "secure": false,
     "pathRewrite": {
-      "^/api/profile": ""
+      "^/profile": ""
+    }
+  },
+  "/error": {
+    "target": "http://httpstat.us",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/error": ""
     }
   }
 }

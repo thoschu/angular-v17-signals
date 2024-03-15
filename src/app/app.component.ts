@@ -53,6 +53,9 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.commentsFilteredLess$.subscribe(noop);
     this.commentsFilteredGreater$.subscribe(noop);
 
+
+    appService.getError().subscribe(console.log);
+
     // 📌📌📌 switchMap: projects each source value to an observable which is merged in the output observable, emitting values only from the most recently projected observable.
     // 📍 https://rxjs.dev/api/index/function/switchMap
     // this.click$.pipe(switchMap((evt: Event) => interval(1000))).subscribe(console.log);
