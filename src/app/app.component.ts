@@ -228,13 +228,13 @@ export class AppComponent implements AfterViewInit, OnInit {
     // 📍 https://www.learnrxjs.io/learn-rxjs/operators/filtering/distinctuntilchanged
     // 📌📌📌 debounceTime
     // 📍 https://www.learnrxjs.io/learn-rxjs/operators/filtering/debouncetime
-    input$.pipe(
-      map((evt: KeyboardEvent) => evt.target),
-      map((target: EventTarget | null) => target as HTMLInputElement),
-      map((element: HTMLInputElement) => element.value),
-      distinctUntilChanged(),
-      debounceTime(1000),
-    ).subscribe(console.log);
+    // input$.pipe(
+    //   map((evt: KeyboardEvent) => evt.target),
+    //   map((target: EventTarget | null) => target as HTMLInputElement),
+    //   map((element: HTMLInputElement) => element.value),
+    //   distinctUntilChanged(),
+    //   debounceTime(1000),
+    // ).subscribe(console.log);
 
     // 📌📌📌 throttleTime and throttle
     // 📍 https://www.learnrxjs.io/learn-rxjs/operators/filtering/throttletime
@@ -245,12 +245,12 @@ export class AppComponent implements AfterViewInit, OnInit {
     //     throttleTime(2000)
     // ).subscribe(console.log);
     // 📍 https://www.learnrxjs.io/learn-rxjs/operators/filtering/throttle
-    input$.pipe(
-      map((evt: KeyboardEvent) => evt.target),
-      map((target: EventTarget | null) => target as HTMLInputElement),
-      map((element: HTMLInputElement) => element.value),
-      throttle(() => interval(1000))
-    ).subscribe(console.log);
+    // input$.pipe(
+    //   map((evt: KeyboardEvent) => evt.target),
+    //   map((target: EventTarget | null) => target as HTMLInputElement),
+    //   map((element: HTMLInputElement) => element.value),
+    //   throttle(() => interval(1000))
+    // ).subscribe(console.log);
   }
 
   protected trackByPostId(index: number, post: Post): number {
