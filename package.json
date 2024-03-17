@@ -3,12 +3,13 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "npm run frontend & npm run backend",
+    "start": "npm run frontend & npm run backend & npm run server",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "frontend": "ng serve",
-    "backend": "npx json-server db.json5"
+    "backend": "npx json-server db.json5",
+    "server": "node server.mjs"
   },
   "private": true,
   "dependencies": {
@@ -20,6 +21,7 @@
     "@angular/platform-browser": "^17.1.0",
     "@angular/platform-browser-dynamic": "^17.1.0",
     "@angular/router": "^17.1.0",
+    "express": "^4.18.3",
     "ramda": "^0.29.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

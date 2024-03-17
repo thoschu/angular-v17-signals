@@ -48,7 +48,7 @@ export class AppService {
         .then(async (promise: Promise<Posts>): Promise<Posts> => await promise)
         .then((posts: Posts): void => observer.next(posts))
         .then((): void => observer.complete())
-        .catch((err: Error): void => observer.error(err));
+        .catch((err: Error): void => observer.error(err)); // only network or dns error
 
       // unsubscribe triggers this fn
       return (): void => abortController.abort();
@@ -65,6 +65,10 @@ export class AppService {
 
   public getError(): Observable<Profile> {
     return this.getPayload<Profile>('/error');
+  }
+
+  public getDelay(): Observable<Profile> {
+    return this.getPayload<Profile>('/delay');
   }
 
   private getPayload<T>(uri: string): Observable<T> {

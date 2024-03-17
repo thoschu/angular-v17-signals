@@ -3,8 +3,8 @@ import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } fr
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterOutlet } from '@angular/router';
 import {
-  catchError, concat, concatMap, debounceTime, delay, distinctUntilChanged, exhaustMap, filter, finalize,
-  fromEvent, interval, map, merge, mergeMap, noop, Observable, of, shareReplay, Subscription,
+  catchError, concat, concatMap, debounceTime, delay, delayWhen, distinctUntilChanged, exhaustMap, filter, finalize,
+  fromEvent, interval, map, merge, mergeMap, noop, Observable, of, retryWhen, shareReplay, Subscription,
   switchMap, take, tap, throwError, timer
 } from 'rxjs';
 import { gt, lt } from 'ramda';
@@ -72,16 +72,24 @@ export class AppComponent implements AfterViewInit, OnInit {
     // ).subscribe((result: any) => console.info(result.email));
     //
     // the catch and rethrow RxJs error handling strategy and the finalize operator
-    appService.getError().pipe(
-      catchError(
-        (errorResponse: HttpErrorResponse) => {
-          console.error(`Error occurred with status: ${errorResponse.status}`, errorResponse);
-
-          return throwError(errorResponse);
-        }
-      ),
-      finalize(() => console.info('getError():finalize: complete')),
-      tap((val: unknown) => console.log(`###${val}###`)),
+    // appService.getError().pipe(
+    //   catchError(
+    //     (errorResponse: HttpErrorResponse) => {
+    //       console.error(`Error occurred with status: ${errorResponse.status}`, errorResponse);
+    //
+    //       return throwError(errorResponse);
+    //     }
+    //   ),
+    //   finalize(() => console.info('getError():finalize: complete')),
+    //   tap((val: unknown) => console.log(`###${val}###`)),
+    // ).subscribe((result: any) => console.info(result.email));
+    //
+    // retry error handling strategy
+    appService.getDelay().pipe(
+        finalize(() => console.info('getDelay():finalize: complete')),
+        tap((val: unknown) => console.log(val)),
+        map((val: any) => val.payload),
+        retryWhen((error: Observable<any>) => error.pipe(delayWhen(() => timer(2000))))
     ).subscribe((result: any) => console.info(result.email));
 
     // 📌📌📌 switchMap: projects each source value to an observable which is merged in the output observable, emitting values only from the most recently projected observable.
