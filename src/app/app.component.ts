@@ -11,6 +11,8 @@ import { startWith, throttle } from 'rxjs/operators';
 import { gt, lt } from 'ramda';
 
 import { AppService, Comment, Comments, Post, Posts, Profile } from './app.service';
+import { debug, RxJSLoggingLevel } from './debug.rxjs';
+import { toUpperOrToLowerCase } from './test.rxjs';
 
 @Component({
   selector: 'app-root',
@@ -182,6 +184,21 @@ export class AppComponent implements AfterViewInit, OnInit {
     // interval(1000).pipe(
     //     exhaustMap((value: number) => interval(1000).pipe(take(5), map((val: number): string => `${val}---${value}`)))
     // ).subscribe(console.log);
+
+    // 📌 custom operator: debug
+    this.appService.getComments()
+      .pipe(
+        debug(RxJSLoggingLevel.INFO, 'Test-Info'),
+      )
+      .subscribe(
+        console.dir,
+        noop,
+        (): void => console.info('complete')
+      );
+    //
+    of('Thomas').pipe(
+        toUpperOrToLowerCase('upperCase'),
+    ).subscribe(console.log);
   }
 
   public ngOnInit(): void {
