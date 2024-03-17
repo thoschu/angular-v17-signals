@@ -5,8 +5,9 @@ import { RouterOutlet } from '@angular/router';
 import {
   catchError, concat, concatMap, debounceTime, delay, delayWhen, distinctUntilChanged, exhaustMap, filter, finalize,
   fromEvent, interval, map, merge, mergeMap, noop, Observable, of, retryWhen, shareReplay, Subscription,
-  switchMap, take, tap, throwError, timer
+  switchMap, take, tap, throttleTime, throwError, timer
 } from 'rxjs';
+import { startWith, throttle } from 'rxjs/operators';
 import { gt, lt } from 'ramda';
 
 import { AppService, Comment, Comments, Post, Posts, Profile } from './app.service';
@@ -85,12 +86,20 @@ export class AppComponent implements AfterViewInit, OnInit {
     // ).subscribe((result: any) => console.info(result.email));
     //
     // retry error handling strategy
-    appService.getDelay().pipe(
-        finalize(() => console.info('getDelay():finalize: complete')),
-        tap((val: unknown) => console.log(val)),
-        map((val: any) => val.payload),
-        retryWhen((error: Observable<any>) => error.pipe(delayWhen(() => timer(2000))))
-    ).subscribe((result: any) => console.info(result.email));
+    // appService.getDelay().pipe(
+    //     finalize(() => console.info('getDelay():finalize: complete')),
+    //     tap((val: unknown) => console.log(val)),
+    //     map((val: any) => val.payload),
+    //     retryWhen((error: Observable<any>) => error.pipe(delayWhen(() => timer(2000))))
+    // ).subscribe((result: any) => console.info(result.email));
+
+    // 📌📌📌 startWith
+    // 📍 https://www.learnrxjs.io/learn-rxjs/operators/combination/startwith
+    // appService.getProfile()
+    //     .pipe(startWith({ email: "thoschulte@googlemail.com" }))
+    //     .subscribe((result: any) => console.info(result));
+    //
+    // this.click$.pipe(startWith(null)).subscribe(console.log);
 
     // 📌📌📌 switchMap: projects each source value to an observable which is merged in the output observable, emitting values only from the most recently projected observable.
     // 📍 https://rxjs.dev/api/index/function/switchMap
@@ -221,10 +230,26 @@ export class AppComponent implements AfterViewInit, OnInit {
     // 📍 https://www.learnrxjs.io/learn-rxjs/operators/filtering/debouncetime
     input$.pipe(
       map((evt: KeyboardEvent) => evt.target),
-        map((target: EventTarget | null) => target as HTMLInputElement),
-        map((element: HTMLInputElement) => element.value),
+      map((target: EventTarget | null) => target as HTMLInputElement),
+      map((element: HTMLInputElement) => element.value),
       distinctUntilChanged(),
       debounceTime(1000),
+    ).subscribe(console.log);
+
+    // 📌📌📌 throttleTime and throttle
+    // 📍 https://www.learnrxjs.io/learn-rxjs/operators/filtering/throttletime
+    // input$.pipe(
+    //     map((evt: KeyboardEvent) => evt.target),
+    //     map((target: EventTarget | null) => target as HTMLInputElement),
+    //     map((element: HTMLInputElement) => element.value),
+    //     throttleTime(2000)
+    // ).subscribe(console.log);
+    // 📍 https://www.learnrxjs.io/learn-rxjs/operators/filtering/throttle
+    input$.pipe(
+      map((evt: KeyboardEvent) => evt.target),
+      map((target: EventTarget | null) => target as HTMLInputElement),
+      map((element: HTMLInputElement) => element.value),
+      throttle(() => interval(1000))
     ).subscribe(console.log);
   }
 
