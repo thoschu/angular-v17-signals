@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, Observer } from 'rxjs';
+import {map, Observable, Observer, tap} from 'rxjs';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 
 export type Post = {
@@ -30,7 +30,7 @@ export class AppService {
   constructor(private readonly http: HttpClient) {}
 
   public getPosts(): Observable<Posts>  {
-    // 📌 fromPromise(fetch('/api/posts', { method: 'GET' }));
+    // 📌 fromPromise(fetch('/api/posts', { method: 'GET', signal: abortController.signal }));
     const abortController: AbortController = new AbortController();
     const signal: AbortSignal = abortController.signal;
 
@@ -38,7 +38,13 @@ export class AppService {
       const promise: Promise<Response> = fetch('/api/posts', { method: 'GET', signal });
 
       promise
-        .then((res: Response) => res.json())
+        .then((res: Response) => {
+          if(res.ok) {
+            return  res.json();
+          } else {
+            return observer.error(`Request failed with status: ${res.status}`);
+          }
+        })
         .then(async (promise: Promise<Posts>): Promise<Posts> => await promise)
         .then((posts: Posts): void => observer.next(posts))
         .then((): void => observer.complete())

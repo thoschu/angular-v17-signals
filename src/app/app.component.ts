@@ -3,13 +3,13 @@ import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } fr
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterOutlet } from '@angular/router';
 import {
-  catchError, concat, concatMap, debounceTime, delay, distinctUntilChanged, exhaustMap, filter,
+  catchError, concat, concatMap, debounceTime, delay, distinctUntilChanged, exhaustMap, filter, finalize,
   fromEvent, interval, map, merge, mergeMap, noop, Observable, of, shareReplay, Subscription,
-  switchMap, take, tap, timer
+  switchMap, take, tap, throwError, timer
 } from 'rxjs';
 import { gt, lt } from 'ramda';
 
-import { AppService, Comment, Comments, Post, Posts } from './app.service';
+import { AppService, Comment, Comments, Post, Posts, Profile } from './app.service';
 
 @Component({
   selector: 'app-root',
@@ -59,15 +59,29 @@ export class AppComponent implements AfterViewInit, OnInit {
     // 📍 https://www.learnrxjs.io/learn-rxjs/operators/error_handling/catch
     // appService.getError().subscribe(
     //     () => console.log('error'),
-    //     (err) => console.log(err),
+    //     (err: HttpErrorResponse) => console.log(err),
     //     () => console.log('complete'));
-
+    //
+    // // the catch and replace error handling strategy
+    // appService.getError().pipe(
+    //   tap((val: unknown) => console.log(`###${val}###`)),
+    //   catchError(
+    //     (errorResponse: HttpErrorResponse) =>
+    //       of({ message: `# ${JSON.stringify(errorResponse.error)} #`, email: 'thoschulte@gmail.com' })
+    //   )
+    // ).subscribe((result: any) => console.info(result.email));
+    //
+    // the catch and rethrow RxJs error handling strategy and the finalize operator
     appService.getError().pipe(
-      tap((val: unknown) => console.log(`###${val}###`)),
       catchError(
-        (errorResponse: HttpErrorResponse) =>
-          of({ message: `# ${JSON.stringify(errorResponse.error)} #`, email: 'thoschulte@gmail.com' })
-      )
+        (errorResponse: HttpErrorResponse) => {
+          console.error(`Error occurred with status: ${errorResponse.status}`, errorResponse);
+
+          return throwError(errorResponse);
+        }
+      ),
+      finalize(() => console.info('getError():finalize: complete')),
+      tap((val: unknown) => console.log(`###${val}###`)),
     ).subscribe((result: any) => console.info(result.email));
 
     // 📌📌📌 switchMap: projects each source value to an observable which is merged in the output observable, emitting values only from the most recently projected observable.
@@ -130,7 +144,8 @@ export class AppComponent implements AfterViewInit, OnInit {
 
     // this.appService.getProfile()
     //   .pipe(
-    //     tap<Profile>(console.log),
+    //     tap<Profile>((profile: Profile) => console.info(profile)),
+    //     finalize(() => console.info('getProfile():finalize: complete'))
     //   )
     //   .subscribe(noop);
 
