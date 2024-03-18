@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { map, Observable, Observer, tap } from 'rxjs';
+import { map, Observable, Observer, Subject, tap } from 'rxjs';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
+
+import { toUpperOrToLowerCase } from './test.rxjs';
 
 export type Post = {
   id: number;
@@ -27,7 +29,27 @@ export type Profile = Readonly<Record<'email', string>>;
 })
 export class AppService {
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {
+    // Hot observable (like a live stream): Hot observables produce values even before a subscription is made. They are already producing values and, when a new subscriber comes along, it will only receive new values from the point of subscription forward.
+
+    // Cold observable (like a DVD video): Cold observables start running upon subscription; that is, the observable sequence only starts pushing values to the observers when .subscribe() is called. Each subscription has its own execution context. This means that if you have multiple subscribers, each one will receive a unique set of emitted values from the start.
+  }
+
+  public getValueFromSubject(): Observable<string> {
+    const subject: Subject<string> = new Subject();
+
+    subject.next('Hello');
+    subject.pipe(toUpperOrToLowerCase('upperCase')).subscribe((data: string): void => console.log(data));
+    subject.next('World');
+
+    const series$: Observable<string> = subject.asObservable().pipe(toUpperOrToLowerCase('lowerCase'));
+
+    series$.subscribe((data: string): void => console.log(data));
+
+    subject.next('Tom S.');
+
+    return series$;
+  }
 
   public getPosts(): Observable<Posts>  {
     // 📌 fromPromise(fetch('/api/posts', { method: 'GET', signal: abortController.signal }));

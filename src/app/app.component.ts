@@ -3,34 +3,12 @@ import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } fr
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterOutlet } from '@angular/router';
 import {
-  catchError,
-  concat,
-  concatMap,
-  debounceTime,
-  delay,
-  delayWhen,
-  distinctUntilChanged,
-  exhaustMap,
-  filter,
-  finalize,
-  forkJoin,
-  fromEvent,
-  interval,
-  map,
-  merge,
-  mergeMap,
-  noop,
-  Observable,
-  of,
-  retryWhen,
-  shareReplay,
-  Subscription,
-  switchMap,
-  take,
-  tap,
-  throttleTime,
-  throwError,
-  timer
+  catchError, concat, concatMap,
+  debounceTime, delay, delayWhen, distinctUntilChanged,
+  exhaustMap, filter, finalize, forkJoin, fromEvent,
+  interval, map, merge, mergeMap, noop,
+  Observable, of, retryWhen, shareReplay, Subscription, switchMap,
+  take, tap, throttleTime, throwError, timer
 } from 'rxjs';
 import { startWith, throttle } from 'rxjs/operators';
 import { gt, lt } from 'ramda';
@@ -82,6 +60,8 @@ export class AppComponent implements AfterViewInit, OnInit {
   constructor(private readonly renderer: Renderer2, private readonly appService: AppService) {
     this.commentsFilteredLess$.subscribe(noop);
     this.commentsFilteredGreater$.subscribe(noop);
+
+    this.appService.getValueFromSubject().subscribe(console.log);
 
     // 📌📌📌 catchError: catches errors on the observable to be handled by returning a new observable or throwing an error.
     // 📍 https://www.learnrxjs.io/learn-rxjs/operators/error_handling/catch
