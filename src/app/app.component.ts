@@ -3,9 +3,34 @@ import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } fr
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterOutlet } from '@angular/router';
 import {
-  catchError, concat, concatMap, debounceTime, delay, delayWhen, distinctUntilChanged, exhaustMap, filter, finalize,
-  fromEvent, interval, map, merge, mergeMap, noop, Observable, of, retryWhen, shareReplay, Subscription,
-  switchMap, take, tap, throttleTime, throwError, timer
+  catchError,
+  concat,
+  concatMap,
+  debounceTime,
+  delay,
+  delayWhen,
+  distinctUntilChanged,
+  exhaustMap,
+  filter,
+  finalize,
+  forkJoin,
+  fromEvent,
+  interval,
+  map,
+  merge,
+  mergeMap,
+  noop,
+  Observable,
+  of,
+  retryWhen,
+  shareReplay,
+  Subscription,
+  switchMap,
+  take,
+  tap,
+  throttleTime,
+  throwError,
+  timer
 } from 'rxjs';
 import { startWith, throttle } from 'rxjs/operators';
 import { gt, lt } from 'ramda';
@@ -196,10 +221,43 @@ export class AppComponent implements AfterViewInit, OnInit {
     //     (): void => console.info('complete')
     //   );
     //
-    of('Thomas').pipe(
-        toUpperOrToLowerCase('upperCase'),
-        testType(),
-    ).subscribe(console.log);
+    // of('Thomas').pipe(
+    //     toUpperOrToLowerCase('upperCase'),
+    //     testType(),
+    // ).subscribe(console.log);
+
+    // 📌📌📌 forkJoin: when the array is passed into forkJoin, the operator waits for each observable to complete. then, it combines the last value from each call into a single observable.
+    // 📍 https://rxjs.dev/api/index/function/forkJoin
+    // let forkJoinObservableObject: Observable<{ foo: number, bar: number, baz: 0, qux: Comments, qax: Posts }> = forkJoin({
+    //   foo: of(1, 2, 3, 4),
+    //   bar: Promise.resolve(8),
+    //   baz: timer(4000),
+    //   qux: this.appService.getComments(),
+    //   qax: this.appService.getPosts()
+    // }).pipe(
+    //     tap((values: {foo: number, bar: number, baz: 0, qux: Comments, qax: Posts}) => console.info(values)),
+    //     tap(({foo, bar, baz, qux, qax}) => console.info(qax)),
+    // );
+    // forkJoinObservableObject.subscribe({
+    //   next: (value: {foo: number, bar: number, baz: 0, qux: Comments, qax: Posts}) => console.log(value),
+    //   complete: () => console.log('This is how forkJoinObservableObject ends!'),
+    // });
+    //
+    let forkJoinObservableArray: Observable<[Comments, Posts, Profile]> = forkJoin<[Comments, Posts, Profile]>([
+      this.appService.getComments(),
+      this.appService.getPosts(),
+      this.appService.getProfile()
+    ]).pipe(
+      tap((list: [Comments, Posts, Profile]) => console.info(list)),
+    );
+    forkJoinObservableArray.subscribe({
+      next: ([comments, posts, profile]: [Comments, Posts, Profile]) => {
+        console.log('Comments', comments);
+        console.log('Posts', posts);
+        console.log('Profile', profile);
+      },
+      complete: () => console.log('This is how forkJoinObservableArray ends!'),
+    });
   }
 
   public ngOnInit(): void {
