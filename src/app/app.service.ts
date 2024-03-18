@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import {AsyncSubject, BehaviorSubject, map, Observable, Observer, ReplaySubject, Subject, tap} from 'rxjs';
+import { AsyncSubject, BehaviorSubject, map, Observable, Observer, ReplaySubject, Subject, tap } from 'rxjs';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 
 import { toUpperOrToLowerCase } from './test.rxjs';
