@@ -8,7 +8,7 @@ import {
   exhaustMap, filter, finalize, first, forkJoin, fromEvent,
   interval, map, merge, mergeMap, noop,
   Observable, of, retryWhen, shareReplay, Subscription, switchMap,
-  take, tap, throttleTime, throwError, timer
+  take, tap, throttleTime, throwError, timer, withLatestFrom
 } from 'rxjs';
 import { startWith, throttle } from 'rxjs/operators';
 import { gt, lt } from 'ramda';
@@ -64,9 +64,20 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.commentsFilteredLess$.subscribe(noop);
     this.commentsFilteredGreater$.subscribe(noop);
 
+    // 📌📌📌 withLatestFrom: latest value from quicker source
+    // 📍 https://www.learnrxjs.io/learn-rxjs/operators/combination/withlatestfrom
+    const timerSource5000: Observable<number> = interval(5000);
+    const timerSource1000: Observable<number> = interval(1000);
+    const withLatestFromExample: Observable<string> = timerSource5000.pipe(
+      withLatestFrom(timerSource1000),
+      map(([first, second]) => {
+        return `First Source (5s): ${first} Second Source (1s): ${second}`;
+      })
+    );
+    const subscribe: Subscription = withLatestFromExample.subscribe((val: string) => console.log(val));
+
     this.storeBigger$ = this.appService.storeService.getPayloadFromStoreBigger(7);
     this.storeSmaller$ = this.appService.storeService.getPayloadFromStoreSmaller(3);
-
     this.storeX$ = forkJoin([
       // 📌📌📌 first: emit only the first value emitted by the source observable and completes.
       // 📍 https://rxjs.dev/api/index/function/first
