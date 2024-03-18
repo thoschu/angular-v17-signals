@@ -66,7 +66,15 @@ export class AppComponent implements AfterViewInit, OnInit {
 
     this.storeBigger$ = this.appService.storeService.getPayloadFromStoreBigger(7);
     this.storeSmaller$ = this.appService.storeService.getPayloadFromStoreSmaller(3);
-    this.storeX$ = forkJoin([this.storeBigger$.pipe(first()), this.storeSmaller$.pipe(first())]);
+
+    this.storeX$ = forkJoin([
+      // 📌📌📌 first
+      // 📍 https://rxjs.dev/api/index/function/first
+      this.storeBigger$.pipe(first()),
+      // 📌📌📌 take
+      // 📍 https://rxjs.dev/api/index/function/take
+      this.storeSmaller$.pipe(take(1))
+    ]);
 
     // this.appService.getValueFromSubject().subscribe(console.log);
     // this.appService.getValueFromBehaviorSubject().subscribe(console.log);
