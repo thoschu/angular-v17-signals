@@ -68,10 +68,10 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.storeSmaller$ = this.appService.storeService.getPayloadFromStoreSmaller(3);
 
     this.storeX$ = forkJoin([
-      // 📌📌📌 first
+      // 📌📌📌 first: emit only the first value emitted by the source observable and completes.
       // 📍 https://rxjs.dev/api/index/function/first
       this.storeBigger$.pipe(first()),
-      // 📌📌📌 take
+      // 📌📌📌 take: emit only the n value emitted by the source observable and completes.
       // 📍 https://rxjs.dev/api/index/function/take
       this.storeSmaller$.pipe(take(1))
     ]);
