@@ -63,9 +63,8 @@ export class AppComponent implements AfterViewInit, OnInit {
 
     // this.appService.getValueFromSubject().subscribe(console.log);
     // this.appService.getValueFromBehaviorSubject().subscribe(console.log);
-    this.appService.getValueFromAsyncSubject().subscribe((value: number): void => {
-      console.log(`Second observer:`, value);
-    });
+    // this.appService.getValueFromAsyncSubject().subscribe((value: number): void => console.log(`Second observer:`, value));
+    this.appService.getValueFromAReplaySubject().subscribe(console.log);
 
     // 📌📌📌 catchError: catches errors on the observable to be handled by returning a new observable or throwing an error.
     // 📍 https://www.learnrxjs.io/learn-rxjs/operators/error_handling/catch
