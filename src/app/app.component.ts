@@ -5,7 +5,7 @@ import { RouterOutlet } from '@angular/router';
 import {
   catchError, concat, concatMap,
   debounceTime, delay, delayWhen, distinctUntilChanged,
-  exhaustMap, filter, finalize, forkJoin, fromEvent,
+  exhaustMap, filter, finalize, first, forkJoin, fromEvent,
   interval, map, merge, mergeMap, noop,
   Observable, of, retryWhen, shareReplay, Subscription, switchMap,
   take, tap, throttleTime, throwError, timer
@@ -28,6 +28,9 @@ export class AppComponent implements AfterViewInit, OnInit {
   public readonly title: string = 'angular-v17-signals';
   private readonly click$: Observable<Event> = fromEvent<Event>(document, 'click');
   private readonly _posts$: Observable<Posts> = this.appService.getPosts().pipe(shareReplay());
+  protected readonly storeBigger$: Observable<string[]>;
+  protected readonly storeSmaller$: Observable<string[]>;
+  protected readonly storeX$: Observable<[string[], string[]]>;
   protected readonly posts$: Observable<Posts> = this.appService.getPosts();
   protected readonly postsFilteredGreaterThan$: Observable<Posts> = this._posts$.pipe(
     map(
@@ -60,6 +63,10 @@ export class AppComponent implements AfterViewInit, OnInit {
   constructor(private readonly renderer: Renderer2, private readonly appService: AppService) {
     this.commentsFilteredLess$.subscribe(noop);
     this.commentsFilteredGreater$.subscribe(noop);
+
+    this.storeBigger$ = this.appService.storeService.getPayloadFromStoreBigger(7);
+    this.storeSmaller$ = this.appService.storeService.getPayloadFromStoreSmaller(3);
+    this.storeX$ = forkJoin([this.storeBigger$.pipe(first()), this.storeSmaller$.pipe(first())]);
 
     // this.appService.getValueFromSubject().subscribe(console.log);
     // this.appService.getValueFromBehaviorSubject().subscribe(console.log);
@@ -226,21 +233,21 @@ export class AppComponent implements AfterViewInit, OnInit {
     //   complete: () => console.log('This is how forkJoinObservableObject ends!'),
     // });
     //
-    let forkJoinObservableArray: Observable<[Comments, Posts, Profile]> = forkJoin<[Comments, Posts, Profile]>([
-      this.appService.getComments(),
-      this.appService.getPosts(),
-      this.appService.getProfile()
-    ]).pipe(
-      tap((list: [Comments, Posts, Profile]) => console.info(list)),
-    );
-    forkJoinObservableArray.subscribe({
-      next: ([comments, posts, profile]: [Comments, Posts, Profile]) => {
-        console.log('Comments', comments);
-        console.log('Posts', posts);
-        console.log('Profile', profile);
-      },
-      complete: () => console.log('This is how forkJoinObservableArray ends!'),
-    });
+    // let forkJoinObservableArray: Observable<[Comments, Posts, Profile]> = forkJoin<[Comments, Posts, Profile]>([
+    //   this.appService.getComments(),
+    //   this.appService.getPosts(),
+    //   this.appService.getProfile()
+    // ]).pipe(
+    //   tap((list: [Comments, Posts, Profile]) => console.info(list)),
+    // );
+    // forkJoinObservableArray.subscribe({
+    //   next: ([comments, posts, profile]: [Comments, Posts, Profile]) => {
+    //     console.log('Comments', comments);
+    //     console.log('Posts', posts);
+    //     console.log('Profile', profile);
+    //   },
+    //   complete: () => console.log('This is how forkJoinObservableArray ends!'),
+    // });
   }
 
   public ngOnInit(): void {

@@ -376,6 +376,21 @@
     <hr>
     <label for="name">Name (4 to 8 characters):</label>
     <input #nameInput type="text" id="name" name="name" required minlength="4" maxlength="18" size="10" />
+
+    <hr>
+
+    <div>
+        <p>A - Z</p>
+        <p>{{ storeBigger$ | async}}</p>
+    </div>
+    <div>
+        <p>Z - A</p>
+        <p>{{ storeSmaller$ | async}}</p>
+    </div>
+    <div>
+        <p>XXX</p>
+        <p>{{ storeX$ | async}}</p>
+    </div>
 </footer>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->

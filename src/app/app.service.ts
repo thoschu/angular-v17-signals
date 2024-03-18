@@ -5,6 +5,7 @@ import { AsyncSubject, BehaviorSubject, map, Observable, Observer, ReplaySubject
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 
 import { toUpperOrToLowerCase } from './test.rxjs';
+import { StoreService } from './store.service';
 
 export type Post = {
   id: number;
@@ -29,7 +30,7 @@ export type Profile = Readonly<Record<'email', string>>;
 })
 export class AppService {
 
-  constructor(private readonly http: HttpClient) {
+  constructor(private readonly http: HttpClient, public readonly storeService: StoreService) {
     // 💡 Hot observable (like a live stream): Hot observables produce values even before a subscription is made. They are already producing values and, when a new subscriber comes along, it will only receive new values from the point of subscription forward.
 
     // 💡 Cold observable (like a DVD video): Cold observables start running upon subscription; that is, the observable sequence only starts pushing values to the observers when .subscribe() is called. Each subscription has its own execution context. This means that if you have multiple subscribers, each one will receive a unique set of emitted values from the start.
