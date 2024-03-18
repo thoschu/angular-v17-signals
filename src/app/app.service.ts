@@ -36,7 +36,7 @@ export class AppService {
   }
 
   public getValueFromAReplaySubject(): any {
-    // 🧷 Cold observable
+    // ⚠️ Cold observable
     // 📌 ReplaySubject: a variant of subject that 'replays' old values to new subscribers by emitting them when they first subscribe.
     const replaySubject: ReplaySubject<number> = new ReplaySubject<number>();
 
@@ -89,7 +89,7 @@ export class AppService {
   }
 
   public getValueFromSubject(): Observable<string> {
-    // 🧷 Hot observable
+    // ⚠️ Hot observable
     const subject: Subject<string> = new Subject();
 
     subject.next('Moin');
